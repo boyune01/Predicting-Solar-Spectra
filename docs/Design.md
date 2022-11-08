@@ -27,7 +27,7 @@
 ## Use Cases
 - Researcher in Built Environments
 	- Input weather data (enumerated over time period t)
-	- Input desired spectral range (month/date/hour)
+	- Input desired spectral range (380-780nm)
 	- Return spectral value (380-780nm) (vector) given t (or ts) in .csv format
 - Broad Researcher
 	- Input weather data (enumerated at time period t)

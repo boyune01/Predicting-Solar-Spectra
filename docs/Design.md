@@ -1,4 +1,4 @@
-# Software Design
+# Solar Spectra Model - Software Design
 
 ## User Stories
 #### Who is the user?

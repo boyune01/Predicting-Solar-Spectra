@@ -87,7 +87,7 @@ def interpolation_1nm(df, wv_len_range):
 
 
 def save_df_to_csv(df, file_dir):
-    df.to_csv(file_dir)
+    df.to_csv(file_dir, index=False)
 
 
 
@@ -95,9 +95,9 @@ def main():
     # DATA INPUT
     rad_in_dir = "/Volumes/GoogleDrive/My Drive/COURSES/22 AU/CSE_583/final_prj/data/raw/2020/2020_0102_rad.csv"
 
-    wea_in_dir = "../data/raw/2020_wea.csv"  # every mins
-    precip_water_in_dir = "../data/raw/2020_precipitable_water.csv"  # every 30 mins (12:15, 12:45)
-    aod_in_dir = "../data/raw/2020_aod_ssa_asymmetry.csv"  # every 10 mins (12:10, 12:20, 12:30)
+    wea_in_dir = "../data/input_raw/2020_wea.csv"  # every mins
+    precip_water_in_dir = "../data/input_raw/2020_precipitable_water.csv"  # every 30 mins (12:15, 12:45)
+    aod_in_dir = "../data/input_raw/2020_aod_ssa_asymmetry.csv"  # every 10 mins (12:10, 12:20, 12:30)
 
     wv_len_dir = "/Volumes/GoogleDrive/My Drive/COURSES/22 AU/CSE_583/final_prj/data/raw/rad_wvlen.csv"
 

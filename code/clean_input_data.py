@@ -163,6 +163,25 @@ def interpolation_1nm(df, wv_len_range):
     return df
 
 
+def cull_df(df1, df2):
+    """
+    Cull a dataframe based on time stamp of another dataframe.
+    For this function to work, reference dataframe (df2) must have a column called 'date'.
+    INPUT:
+    (1) df1 (pandas df) - dataframe to cull
+    (2) df2 (pandas df) - dataframe to reference time stamp
+    OUTPUT:
+    pandas df
+    """
+    # create a df with just dates (from 'date' column of df2)
+    date_df = df2['date']
+    date_df = date_df.to_frame()
+    
+    df = df1.merge(date_df, how='inner')
+    
+    return df
+
+
 def save_df_to_csv(df, file_dir):
     df.to_csv(file_dir, index=False)
 
@@ -181,7 +200,7 @@ def main():
 
     # Aerosol Optical Depth Data
     aod_df = read_wea_datas(data_dir, 'aod')
-    aod_df = drop_dup_nan(wea_df, 'date')
+    aod_df = drop_dup_nan(aod_df, 'date')
 
     # Precipitable Water Content Data
     prcp_wtr_df = read_wea_datas(data_dir, 'precip')
@@ -190,6 +209,13 @@ def main():
 
     # Merge all df to have same time (= cull times when there aren't other data)
     input_df = merge_df(wea_df, prcp_wtr_df, aod_df)
+
+    # Check for negative values in weather data
+    mask = input_df.loc[:, input_df.columns != 'date'] < 0
+    mask1 = mask.sum(axis=1) <= 0
+    input_df1 = input_df[mask1]
+    input_df1
+
 
     # READ AND CLEAN RADIATION DATA
     # format date
@@ -217,21 +243,23 @@ def main():
     rad_df1 = rad_df.drop(columns=['date'], axis =1)  # part of df for spectrum (drop date column)
     interpolated_df = interpolation_1nm(rad_df1, [334, 1076])
     interpolated_df['date'] = rad_df['date']  # add back in date (contains date and spectral data in every 1nm)
+    
+    # re-order 'date' column to first column
+    cols = interpolated_df.columns.tolist()
+    cols = cols[-1:] + cols[:-1]
+    interpolated_df = interpolated_df[cols]
 
-    # Cull Radiation data based on same date time as input weather data:
-    # Create 1 column df with just date
-    date_df = input_df['date']  # get dates from input_df
-    date_df = date_df.to_frame()  # make series to df
-
-    rad_df3 = merge_df(date_df, interpolated_df)  # culled
+    # Cull both rad and weather data based on common datetime
+    rad_df3 = cull_df(interpolated_df, input_df1)  # culled rad data
+    input_df2 = cull_df(input_df1, rad_df3)  # culled wea data
 
 
     # DATA OUTPUT
-    wea_out_dir = "../data/cleaned/2020_wea_input.csv"
-    rad_out_dir = "../data/cleaned/2020_rad_input.csv"
+    wea_out_dir = "../data/input_cleaned/wea_input.csv"
+    rad_out_dir = "../data/input_cleaned/rad_input.csv"
 
     # Save
-    save_df_to_csv(input_df, wea_out_dir)
+    save_df_to_csv(input_df2, wea_out_dir)
     save_df_to_csv(rad_df3, rad_out_dir)
 
 

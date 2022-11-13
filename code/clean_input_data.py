@@ -1,37 +1,84 @@
 """
-This module ....
+This module is used to read in weather and solar spectra data
+(downloaded from NREL website as .csv files) and cleans them
+so that it's ready to be used for ML algorithms.
+The functions in this module perform the following tasks:
+(1) specifc for weather data - Read in multiple .csv data and convert to one pandas dataframe by concatenating them.
+(2) Checking and removing rows with duplicate dates and NaN.
+(3) Cull rows of data based on matching timeseries of multiple dataframes.
+(4) specifc for solar spectra data - Read in multiple .csv data and convert to one pandas dataframe by concatenating them.
+(5) For solar spectra data only - clean data into 1nm wavelength intervals by interpolating between measured wavelengths.
+(6) Save cleaned pandas dataframes to .csv file.
+
 """
 
 import pandas as pd
+import os
 
 
-def read_wea_data(file_dir):
+def read_wea_datas(file_dir, identifier):
     """
-    This function reads in .csv data and outputs a pandas df.
-    The date input must be named exatly as follows:
-    date: 'DATE (MM/DD/YYYY)'
-    time: 'MST'
-    INPUT - .csv file
-    OUTPUT - pandas df
+    Function to read multiple .csv datas and merge them into 1 pandas df
+    INPUT:
+    (1) file_dir - directory of .csv files to read and combine in a pandas df.
+    (2) identifier - part of file name that is repeated across all the files. 
+    i.e. for files (rad_2018, rad_2019, rad_2020), identifier is 'rad'.
+    OUTPUT:
+    combined and sorted (based on datetime) pandas df.
     """
-    df = pd.read_csv(file_dir, parse_dates=[['DATE (MM/DD/YYYY)', 'MST']])
-    return df
+    files = os.listdir(file_dir)
+    files = sorted(files)
+
+    count = 0
+    frames = []
+    for file in files:
+        count += 1
+        if file.startswith(identifier):
+            name = identifier + "_" + "df" + str(count)
+            name = pd.read_csv(file_dir + file, on_bad_lines="warn", dtype="float", header=0, parse_dates=[['DATE (MM/DD/YYYY)', 'MST']])
+            frames.append(name)
+            
+    # combine all csv monthly data into a pandas df
+    if len(frames) > 1:
+        combined_df = pd.concat(frames)  # if there is multiple frames, concat
+    else:
+        combined_df = name
+    
+    # Change name of the date column
+    combined_df.rename(columns={'DATE (MM/DD/YYYY)_MST':'date'}, inplace = True)
+
+    return combined_df
+
+
+def drop_dup_nan(df, column):
+    """
+    Removes duplicates and NaNs from dataframe
+    """
+    print (f'Original dataframe: {len(df)} rows')
+
+    df_dedup = df.drop_duplicates(subset=column)
+    print (f'De-duplicated dataframe: {len(df_dedup)} rows')
+    print (f'Duplicate entries: {len(df) - len(df_dedup)} rows')
+    
+    df_dedup_is_nan = df_dedup.isnull()  # [25000, 8]
+    mask = df_dedup_is_nan.sum(axis=1) == 0  # [25000]
+    
+    df_dedup_no_nan = df_dedup[mask]  # [10000]
+    
+    print (f'Entries without NaN: {len(df_dedup_no_nan)}')
+    print (f'Entries containing NaN: {len(df_dedup) - len(df_dedup_no_nan)}')
+    
+    return df_dedup_no_nan
 
 
 def merge_df(*dataframes):
     """
-    This function merges all the pandas df (input) and merge based on a column with same name.
-    All input df must have 1 column with same name.
-    If the data from the both columns match, that row will remain in the new df.
-    INPUT - multiple pandas df
-    OUTPUT - one pandas df
-    Usage:
-    df1 = ...
-    df2 = ...
-    df3 = ...
-    merged_df = merge_df(df1, df2)
-    merged_df2 = merge_df(df1, df2, df3)
+    For this to work, all df must have atleast 1 column
+    with same name (which is the column used to merge).
+    This function will check for same data from the column
+    and if it doens't match, those rows will be culled.
     """
+    
     assert len(dataframes) > 1  # this raises error when there is only 1 df
     # 1st element of the list
     df = dataframes[0]
@@ -40,6 +87,37 @@ def merge_df(*dataframes):
     for new_df in dataframes[1:]:
         df = df.merge(new_df, how='inner')
     return df
+
+
+def read_rad_datas(file_dir, identifier):
+    """
+    Function to read multiple .csv datas and merge them into 1 pandas df
+    INPUT:
+    (1) file_dir - directory of .csv files to read and combine in a pandas df.
+    (2) identifier - part of file name that is repeated across all the files. 
+    i.e. for files (rad_2018, rad_2019, rad_2020), identifier is 'rad'.
+    OUTPUT:
+    combined and sorted (based on datetime) pandas df.
+    """
+    files = os.listdir(file_dir)
+    files = sorted(files)
+
+    count = 0
+    frames = []
+    for file in files:
+        count += 1
+        if file.startswith(identifier):
+            name = identifier + "_" + "df" + str(count)
+            name = pd.read_csv(file_dir + file, on_bad_lines="warn", dtype="float", header=None)
+            frames.append(name)
+            
+    # combine all csv monthly data into a pandas df
+    if len(frames) > 1:
+        combined_df = pd.concat(frames)  # if there is multiple frames, concat
+    else:
+        combined_df = name
+
+    return combined_df
 
 
 def interpolation_1nm(df, wv_len_range):
@@ -90,74 +168,71 @@ def save_df_to_csv(df, file_dir):
     df.to_csv(file_dir, index=False)
 
 
-
 def main():
-    # DATA INPUT
-    rad_in_dir = "/Volumes/GoogleDrive/My Drive/COURSES/22 AU/CSE_583/final_prj/data/raw/2020/2020_0102_rad.csv"
+    # DATA INPUT 
+    # Directory containing all data inputs
+    data_dir = "/Volumes/GoogleDrive/My Drive/COURSES/22 AU/CSE_583/final_prj/data/raw/"
 
-    wea_in_dir = "../data/input_raw/2020_wea.csv"  # every mins
-    precip_water_in_dir = "../data/input_raw/2020_precipitable_water.csv"  # every 30 mins (12:15, 12:45)
-    aod_in_dir = "../data/input_raw/2020_aod_ssa_asymmetry.csv"  # every 10 mins (12:10, 12:20, 12:30)
+    wv_len_dir = "../data/ref/rad_wvlen.csv"
 
-    wv_len_dir = "/Volumes/GoogleDrive/My Drive/COURSES/22 AU/CSE_583/final_prj/data/raw/rad_wvlen.csv"
+    # READ AND CLEAN WEATHER DATA INPUT
+    # Weather Data
+    wea_df = read_wea_datas(data_dir, 'wea')
+    wea_df = drop_dup_nan(wea_df, 'date')
 
-    # Read Input Data
-    wea_df = read_wea_data(wea_in_dir)
-    prcp_wtr_df = read_wea_data(precip_water_in_dir)
-    aod_df = read_wea_data(aod_in_dir)
+    # Aerosol Optical Depth Data
+    aod_df = read_wea_datas(data_dir, 'aod')
+    aod_df = drop_dup_nan(wea_df, 'date')
 
-    # Round time for prcp_wtr_df
-    # Precip_wtr data has time series every 15mins and 45mins
-    # which doesn't align with other data time series (i.e. aod - given every 10, 20, 30 etc mins)
-    # So, we need to round the time to nearest hour
-    prcp_wtr_df['DATE (MM/DD/YYYY)_MST'] = prcp_wtr_df['DATE (MM/DD/YYYY)_MST'].dt.ceil(freq='30T')
+    # Precipitable Water Content Data
+    prcp_wtr_df = read_wea_datas(data_dir, 'precip')
+    prcp_wtr_df["date"] = prcp_wtr_df["date"].dt.ceil(freq="30T")  # 12:15, 12:45 --> 12:00, 12:30
+    prcp_wtr_df = drop_dup_nan(prcp_wtr_df, 'date')
 
     # Merge all df to have same time (= cull times when there aren't other data)
     input_df = merge_df(wea_df, prcp_wtr_df, aod_df)
 
-    # Rename input data (all weather data) date column (to be used when culling solar_rad data)
-    input_df.rename(columns={'DATE (MM/DD/YYYY)_MST':'date'}, inplace = True)
-
-
-    # Read Solar Spectral Data
-    rad_df = pd.read_csv(rad_in_dir, header=None)
-
-    # Create a date column with same timeseries format as input data
-    # 1=yr, 2=month, 3=hour (726=7:26) 
-    # need to make date into sth like 20200010725 and give format "%Y%j%H%M"
-    rad_df["date"] = rad_df[1]*1000000 + rad_df[2]*1000 + rad_df[3]
-    rad_df["date"] = pd.to_datetime(rad_df["date"], format="%Y%j%H%M")
+    # READ AND CLEAN RADIATION DATA
+    # format date
+    rad_df = read_rad_datas(data_dir, "rad")
+    rad_df["date"] = rad_df[1]*10000000 + rad_df[2]*10000 + rad_df[3]  # 20200010725
+    rad_df["date"] = pd.to_datetime(rad_df["date"], format = "%Y%j%H%M")
     
     # cull irrelevant columns
     time_idx = [x for x in range(0, 7)]  # 1=yr, 2=month, 3=hour (726=7:26)
     other_idx = [x for x in range(1025, 1031)]
     drop_idx = time_idx + other_idx
-
     rad_df.drop(columns=drop_idx, inplace=True)
-    
-    # rename columns to match the measured wavelengths
-    # Currently, it's just labeled numberically (0,1,2,3 ...)
+
+    # clean dup and NaN
+    drop_dup_nan(rad_df, 'date')
+
+    # rename columns to match the measrued wavelength
+    wv_len_dir = "../data/ref/rad_wvlen.csv"
     wv_len_df = pd.read_csv(wv_len_dir, header=None)
-    new_col_name = wv_len_df[0].values.tolist()
-    new_col_name.append('date')  # add date to the end of list containing new column names
-    rad_df.columns = new_col_name  # rename columns to match the new column names
+    wv_len_num = wv_len_df[0].values.tolist()
+    rad_df.columns = wv_len_num  # rename columns to match the wv_len_num
 
-    # Create new df for interpolation (just to put into interpolation_1nm function)
-    rad_df1 = rad_df.drop(columns=['date'], axis=1)
-
-    # Interpolate to get data into every 1nm
-    rad_df2 = interpolation_1nm(rad_df1, [334, 1076])
-
-    # Add back in the date column to the interpolated spectral data
-    rad_df2['date'] = rad_df['date']  # this contains date and spectral data in every 1nm
+    # interpolate
+    rad_df1 = rad_df.drop(columns=['date'], axis =1)  # part of df for spectrum (drop date column)
+    interpolated_df = interpolation_1nm(rad_df1, [334, 1076])
+    interpolated_df['date'] = rad_df['date']  # add back in date (contains date and spectral data in every 1nm)
 
     # Cull Radiation data based on same date time as input weather data:
     # Create 1 column df with just date
-    date_df = input_df['date']  # get date from input weather df
+    date_df = input_df['date']  # get dates from input_df
     date_df = date_df.to_frame()  # make series to df
 
-    # Cull
-    rad_df3 = merge_df(date_df, rad_df2)
+    rad_df3 = merge_df(date_df, interpolated_df)  # culled
+
+
+    # # rename columns to match the measured wavelengths
+    # # Currently, it's just labeled numberically (0,1,2,3 ...)
+    # wv_len_df = pd.read_csv(wv_len_dir, header=None)
+    # new_col_name = wv_len_df[0].values.tolist()
+    # new_col_name.append('date')  # add date to the end of list containing new column names
+    # rad_df.columns = new_col_name  # rename columns to match the new column names
+
 
 
     # DATA OUTPUT
@@ -167,7 +242,6 @@ def main():
     # Save
     save_df_to_csv(input_df, wea_out_dir)
     save_df_to_csv(rad_df3, rad_out_dir)
-
 
 
 if __name__ == "__main__":

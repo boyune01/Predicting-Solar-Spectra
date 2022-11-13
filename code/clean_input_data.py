@@ -9,7 +9,6 @@ The functions in this module perform the following tasks:
 (4) specifc for solar spectra data - Read in multiple .csv data and convert to one pandas dataframe by concatenating them.
 (5) For solar spectra data only - clean data into 1nm wavelength intervals by interpolating between measured wavelengths.
 (6) Save cleaned pandas dataframes to .csv file.
-
 """
 
 import pandas as pd
@@ -35,7 +34,7 @@ def read_wea_datas(file_dir, identifier):
         count += 1
         if file.startswith(identifier):
             name = identifier + "_" + "df" + str(count)
-            name = pd.read_csv(file_dir + file, on_bad_lines="warn", dtype="float", header=0, parse_dates=[['DATE (MM/DD/YYYY)', 'MST']])
+            name = pd.read_csv(file_dir + file, on_bad_lines="skip", dtype="float", header=0, parse_dates=[['DATE (MM/DD/YYYY)', 'MST']])
             frames.append(name)
             
     # combine all csv monthly data into a pandas df
@@ -62,7 +61,7 @@ def drop_dup_nan(df, column):
     
     df_dedup_is_nan = df_dedup.isnull()  # [25000, 8]
     mask = df_dedup_is_nan.sum(axis=1) == 0  # [25000]
-    
+
     df_dedup_no_nan = df_dedup[mask]  # [10000]
     
     print (f'Entries without NaN: {len(df_dedup_no_nan)}')
@@ -108,7 +107,7 @@ def read_rad_datas(file_dir, identifier):
         count += 1
         if file.startswith(identifier):
             name = identifier + "_" + "df" + str(count)
-            name = pd.read_csv(file_dir + file, on_bad_lines="warn", dtype="float", header=None)
+            name = pd.read_csv(file_dir + file, on_bad_lines="skip", dtype="float", header=None)
             frames.append(name)
             
     # combine all csv monthly data into a pandas df
@@ -196,22 +195,23 @@ def main():
     # format date
     rad_df = read_rad_datas(data_dir, "rad")
     rad_df["date"] = rad_df[1]*10000000 + rad_df[2]*10000 + rad_df[3]  # 20200010725
-    rad_df["date"] = pd.to_datetime(rad_df["date"], format = "%Y%j%H%M")
+    rad_df["date"] = pd.to_datetime(rad_df["date"], format="%Y%j%H%M")
     
     # cull irrelevant columns
-    time_idx = [x for x in range(0, 7)]  # 1=yr, 2=month, 3=hour (726=7:26)
+    time_idx = [x for x in range(0, 7)]
     other_idx = [x for x in range(1025, 1031)]
     drop_idx = time_idx + other_idx
     rad_df.drop(columns=drop_idx, inplace=True)
 
     # clean dup and NaN
-    drop_dup_nan(rad_df, 'date')
+    rad_df = drop_dup_nan(rad_df, 'date')
 
     # rename columns to match the measrued wavelength
-    wv_len_dir = "../data/ref/rad_wvlen.csv"
-    wv_len_df = pd.read_csv(wv_len_dir, header=None)
-    wv_len_num = wv_len_df[0].values.tolist()
-    rad_df.columns = wv_len_num  # rename columns to match the wv_len_num
+    measured_wv_len_dir = "../data/ref/rad_wvlen.csv"
+    measured_wv_len_df = pd.read_csv(measured_wv_len_dir, header=None)
+    measured_wv_len_num = measured_wv_len_df[0].values.tolist()  # get values of 1st col as list (to be used as new column)
+    measured_wv_len_num.append('date')  # add date to the end
+    rad_df.columns = measured_wv_len_num  # rename columns to match the wv_len_num
 
     # interpolate
     rad_df1 = rad_df.drop(columns=['date'], axis =1)  # part of df for spectrum (drop date column)
@@ -224,15 +224,6 @@ def main():
     date_df = date_df.to_frame()  # make series to df
 
     rad_df3 = merge_df(date_df, interpolated_df)  # culled
-
-
-    # # rename columns to match the measured wavelengths
-    # # Currently, it's just labeled numberically (0,1,2,3 ...)
-    # wv_len_df = pd.read_csv(wv_len_dir, header=None)
-    # new_col_name = wv_len_df[0].values.tolist()
-    # new_col_name.append('date')  # add date to the end of list containing new column names
-    # rad_df.columns = new_col_name  # rename columns to match the new column names
-
 
 
     # DATA OUTPUT

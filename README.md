@@ -28,6 +28,8 @@ Atmospheric data used for training are specific data that contributes to color o
 
 12. **Precipitable Water**: This data represents how much water (in any form such as ice, water, water vapor etc.) is in a column of air.
 
-### (2) Solar Spectra
+### (2) [Solar Spectra](https://midcdmz.nrel.gov/apps/spectra.pl?BMS)
+
+This data shows radiation data (in unit of W/m<sup>2</sup>) for every nm. The wavelength ranges from 350nm to 1050nm. This spectral data represents the color of the sun.
 
 

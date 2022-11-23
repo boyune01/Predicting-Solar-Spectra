@@ -9,15 +9,14 @@ The training data comes from [NREL Solar Radiation Research Laboratory](https://
 ### (1) Atmospheric Parameters
 Atmospheric data used for training are specific data that contributes to color of the sky through scattering. 
 
-#### A. [weather data](https://midcdmz.nrel.gov/apps/day.pl?BMS) (collected every 5 mins)
+#### A. [weather data](https://midcdmz.nrel.gov/apps/day.pl?BMS)
 1. **Zenith Angle** 
 2. **Azimuth Angle**
 3. **Total Cloud Cover**: How much cloud there is in a fisheye image of the sky.
 4. **Opaque Cloud Cover** How much thick cloud there is in a fisheye image of the sky.
 
-#### B. [Aerosol Optical Depth (AOD)](https://midcdmz.nrel.gov/apps/daily.pl?site=AODSRRL1S&start=20150701&yr=2021&mo=9&dy=19) (collected every 10 mins, intermittently not collected) <br>
-AOD data below are measure of aerosols distributed within a column of air at a particular wavelength (i.e. 400nm). Measurement of Aerosols at different wavelength is related to the size distribution of the particles which affects scattering (thus color) of light. <br>
-5. **AOD 400**
+#### B. [Aerosol Optical Depth (AOD)](https://midcdmz.nrel.gov/apps/daily.pl?site=AODSRRL1S&start=20150701&yr=2021&mo=9&dy=19) <br>
+5. **AOD 400**: AOD data below are measure of aerosols distributed within a column of air at a particular wavelength (i.e. 400nm). Measurement of Aerosols at different wavelength is related to the size distribution of the particles which affects scattering (thus color) of light.
 6. **AOD 500**
 7. **AOD 675**
 8. **AOD 870**
@@ -25,7 +24,7 @@ AOD data below are measure of aerosols distributed within a column of air at a p
 10. **SSA 675**: Single Scattering Albedo. This represents the ratio of scattering efficiency to total extinction efficiency. Value of 1 means all particle extinction is due to scattering while 0 means all particle extinction is due to absorption. 675 represents SSA at 675nm wavelength.\
 11. **Asymmetry 675**: Value showing how much back scattering happens. 675 represents Asymmetry at 675nm wavelength.
 
-#### C. [Precipitable Water](https://midcdmz.nrel.gov/apps/daily.pl?site=PWVSRRL&live=1) (Collected every 1 hour)
+#### C. [Precipitable Water](https://midcdmz.nrel.gov/apps/daily.pl?site=PWVSRRL&live=1)
 
 12. **Precipitable Water**: This data represents how much water (in any form such as ice, water, water vapor etc.) is in a column of air.
 

@@ -1,3 +1,11 @@
+"""
+simple moduled designed to merge two speicific datasets
+wea_input contains weather variables
+cct contains scalar values related to solar spectra
+datasets are merged by timestamp
+output will inform linear regression
+"""
+
 import pandas as pd
 
 pd.set_option('display.max_columns', None)

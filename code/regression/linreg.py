@@ -20,7 +20,7 @@ pd.set_option("display.max_columns", None)
 reading in data and defining X matrix & y vector
 """
 
-df = pd.read_csv("/home/bmcgreal/Predicting-Sun-Spectra/data/input_cleaned/linreg.csv")
+df = pd.read_csv('data\input_cleaned\cct_input.csv')
 print(df)
 
 X = df[["Zenith Angle [degrees]", "Azimuth Angle [degrees]",
@@ -30,7 +30,6 @@ X = df[["Zenith Angle [degrees]", "Azimuth Angle [degrees]",
         "Asymmetry [675nm]",
         "Precipitable Water [mm]"]]
 y = df["cct"]
-
 
 """
 statsmodels approach

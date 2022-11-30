@@ -49,8 +49,7 @@
 	- Code that originally trained model and found estimation parameters
 	- Will need to match solar spectra data to weather data
 	- ML approach to train model
-- User interface? (If we have time)
-	- Is it a dashboard? Is it a python package? Just a bunch of code in github?
+- User interface? - Most likely a python module that defines a function to be run on user's data
 - Function - Input weather data
 	- Change .csv to pandas dataframe
 	- Combine based on same timeseries

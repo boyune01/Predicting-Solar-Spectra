@@ -20,7 +20,11 @@ pd.set_option('display.max_columns', None)
 reading in data and defining X matrix & y vector
 """
 
+<<<<<<< HEAD
 df = pd.read_csv('../../data/input_cleaned/linreg.csv')
+=======
+df = pd.read_csv('~/Predicting-Sun-Spectra/data/input_cleaned/linreg.csv')
+>>>>>>> b7de79776e17961370d6c1d10f26215bedf109e5
 print(df)
 
 X = df[['Zenith Angle [degrees]', 'Azimuth Angle [degrees]',

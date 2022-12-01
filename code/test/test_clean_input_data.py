@@ -7,12 +7,21 @@ from code import clean_input_data
 
 data_dir = "/Volumes/GoogleDrive/My Drive/COURSES/22 AU/CSE_583/final_prj/data/raw/"
 
+
 class UnitTests(unittest.TestCase):
-    def test_read_wea_datas(self):
+    def smoke_test_read_wea_datas(self):
+        """
+        smoke test to check for file_dir exists.
+        """
+        with self.assertRaises(FileNotFoundError):
+            
+        return
+
+    def edge_test_read_wea_datas(self):
         """
         Edge test to test for .csv format
         """
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             for file in files:  # Q: WE WANT TO CHECK 'FILES' WHICH IS A VALUE INSIDE 'READ_WEA_DATAS' FUNCTION. HOW DO WE ACCESS A VALUE INSIDE A FUNCTION?
                 # Split the extension from the path and normalise it to lowercase.
                 ext = os.path.splitext(file)[-1].lower()

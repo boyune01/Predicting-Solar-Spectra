@@ -3,7 +3,7 @@ Test function
 """
 import os
 import unittest
-from code import clean_input_data
+from ../code import clean_input_data
 
 data_dir = "/Volumes/GoogleDrive/My Drive/COURSES/22 AU/CSE_583/final_prj/data/raw/"
 

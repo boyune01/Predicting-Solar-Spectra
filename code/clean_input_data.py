@@ -17,7 +17,7 @@ import os
 
 def read_wea_datas(file_dir, identifier):
     """
-    Function to read multiple .csv datas and merge them into 1 pandas df
+    Function to read multiple .csv datas and merge them into 1 pandas df.
     INPUT:
     (1) file_dir - directory of .csv files to read and combine in a pandas df.
     (2) identifier - part of file name that is repeated across all the files. 
@@ -27,6 +27,11 @@ def read_wea_datas(file_dir, identifier):
     """
     files = os.listdir(file_dir)
     files = sorted(files)
+
+    # Check files are .csv
+    ext = os.path.splitext(files)[-1].lower()
+    if ext != ".csv":
+        raise TypeError
 
     count = 0
     frames = []
@@ -52,6 +57,10 @@ def read_wea_datas(file_dir, identifier):
 def drop_dup_nan(df, column):
     """
     Removes duplicates and NaNs from dataframe
+    INPUT:
+    (1) df (pandas dataframe) - dataframe to test for duplicates and NaNs.
+    (2) column (string) - column in the dataframe to test for duplicates.
+    OUTPUT: pandas dataframe
     """
     print (f'Original dataframe: {len(df)} rows')
 
@@ -90,7 +99,8 @@ def merge_df(*dataframes):
 
 def read_rad_datas(file_dir, identifier):
     """
-    Function to read multiple .csv datas and merge them into 1 pandas df
+    Function to read multiple .csv datas and merge them into 1 pandas df.
+    Radiation data should contain wavelength range between 380nm to 780nm.
     INPUT:
     (1) file_dir - directory of .csv files to read and combine in a pandas df.
     (2) identifier - part of file name that is repeated across all the files. 
@@ -121,9 +131,9 @@ def read_rad_datas(file_dir, identifier):
 
 def interpolation_1nm(df, wv_len_range):
     """
-    This is a function to interpolate calibrated spectral data to 1nm interval
+    This is a function to interpolate calibrated spectral data to 1nm interval.
     INPUT:
-    (1) pandas df containing only the wavelength data (no date / or any other information)
+    (1) df (pandas df) - containing only the wavelength data (no date / or any other information)
     (2) wv_len_range (list) - i.e. [334, 1076].
     OUTPUT - pandas dataframe interpolated (in 1nm interval)
     """

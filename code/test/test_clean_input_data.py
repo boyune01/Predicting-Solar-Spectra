@@ -3,7 +3,7 @@ Test function
 """
 import os
 import unittest
-from ../code import clean_input_data
+from code import clean_input_data
 
 data_dir = "/Volumes/GoogleDrive/My Drive/COURSES/22 AU/CSE_583/final_prj/data/raw/"
 
@@ -13,7 +13,7 @@ class UnitTests(unittest.TestCase):
         Smoke test to check the function runs.
         """
         file_dir = data_dir
-        clean_input_data(file_dir, 'wea')
+        clean_input_data.read_wea_datas(file_dir, 'wea')
         
         return
     
@@ -23,8 +23,8 @@ class UnitTests(unittest.TestCase):
         """
         with self.assertRaises(TypeError):
             file_dir = "...."
-            clean_input_data(file_dir, 'wea')
+            clean_input_data.read_wea_datas(file_dir, 'wea')
         
         return
 
-    def 
+    # def 

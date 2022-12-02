@@ -20,6 +20,8 @@ pd.set_option("display.max_columns", None)
 reading in data and defining X matrix & y vector
 """
 
+# hey
+
 df = pd.read_csv('~/Predicting-Sun-Spectra/data/input_cleaned/linreg.csv')
 print(df)
 

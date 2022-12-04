@@ -6,11 +6,7 @@ statsmodels approach seems to be better suited
 """
 
 import pandas as pd
-# import numpy as np
-
 import statsmodels.api as sm
-# from scipy import stats
-
 from sklearn import linear_model
 
 pd.set_option('display.max_columns', None)
@@ -70,30 +66,3 @@ print('')
 print('R-Squared (i.e. measure of fit)')
 print(regr.score(X, y))
 print('')
-
-"""
-regr = linear_model.LinearRegression()
-regr.fit(X, y)
-params = np.append(regr.intercept_, regr.coef_)
-predictions = regr.predict(X)
-
-newX = pd.DataFrame({"Constant":np.ones(len(X))}).join(pd.DataFrame(X))
-MSE = (sum((y-predictions)**2))/(len(newX)-len(newX.columns))
-
-var_b = MSE*(np.linalg.inv(np.dot(newX.T,newX)).diagonal())
-sd_b = np.sqrt(var_b)
-ts_b = params/ sd_b
-
-p_values =[2*(1-stats.t.cdf(np.abs(i),
-           (len(newX)-len(newX[0])))) for i in ts_b]
-
-sd_b = np.round(sd_b, 3)
-ts_b = np.round(ts_b, 3)
-p_values = np.round(p_values, 3)
-params = np.round(params, 4)
-
-output = pd.DataFrame()
-output["Coefficients"], output["Standard Errors"], output["T-Stat"],
-                        output["p-value"] = [params, sd_b, ts_b, p_values]
-print(output)
-"""

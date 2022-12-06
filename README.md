@@ -1,4 +1,43 @@
-# GenSolarRad
+# SolarML
+
+FINISH BY WEDNESDAY NIGHT
+
+- Add tree (repository structure)
+- Code quality
+   - variables 1 letter
+   - properly named variables / functions
+   - is code easy to read?
+   - Comments 
+   - style (5 pts)
+      - doc strings
+      - triple doubles for doc strings
+      - style checker
+
+- test
+    - mix of smoke / one shot / pattern test
+    - each test function should test 1 test
+    - Does unittest throughly cover all parts of the code?
+    - Any code that reads in data / calculate not using ML should have tests
+ 
+- continuous integration
+    - add badge in the readme --> ??
+    - code coverage badge? (for unittest)
+    - do you have CI hub?
+
+- Update design docs
+    - use cases
+    - inputs / outputs / data types
+    - documentation? (To pull down repository and run the code --> should be in the readme)
+   
+    
+
+
+INCLUDE
+- What it does
+- sortware dependencies
+- Instructions on how to use the code
+- Examples --> how to work with package
+**
 
 ## Project Description
 This project is an analysis project that aims to study if it is possible to accurately predict the solar spectra given atmospheric parameters. 

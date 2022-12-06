@@ -1,8 +1,8 @@
-'''
+"""
 This module is designed to run ridge regressions of wea inputs on cct
 cct is designated as vector y, wea inputs as matrix X
 regression analysis performed using sklearn
-'''
+"""
 
 import pandas as pd
 import numpy as np
@@ -21,15 +21,15 @@ X = df[['Zenith Angle [degrees]', 'Azimuth Angle [degrees]',
 y = df['cct']
 
 
-'''
+"""
 k fold cross validation (k = 5)
-'''
+"""
 
-'''
+"""
 How to compute MSE?
 Attributes cv_values_ is only available if store_cv_values=True and cv=None,
 which are for  Leave-One-Out cross-validation
-'''
+"""
 
 alpha_range = np.arange(0.1, 10.0, 0.1)
 
@@ -58,10 +58,10 @@ print('')
 
 
 
-'''
+"""
 Train the ridge regression model with all data
 Use for loop to find the best alpha value
-'''
+"""
 
 
 alpha_range = np.arange(0, 10.0, 0.1)

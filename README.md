@@ -1,4 +1,4 @@
-# GenSolarRad
+# SolarML
 
 ## Project Description
 This project is an analysis project that aims to study if it is possible to accurately predict the solar spectra given atmospheric parameters. 

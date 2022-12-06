@@ -20,6 +20,50 @@ X = df[['Zenith Angle [degrees]', 'Azimuth Angle [degrees]',
         'Precipitable Water [mm]']]
 y = df['cct']
 
+
+'''
+k fold cross validation (k = 5)
+'''
+
+'''
+How to compute MSE?
+Attributes cv_values_ is only available if store_cv_values=True and cv=None,
+which are for  Leave-One-Out cross-validation
+'''
+
+alpha_range = np.arange(0.1, 10.0, 0.1)
+
+train_X, test_X, train_y, test_y = train_test_split(X, y, test_size=0.2,
+                                                    random_state=0)
+
+regressor = RidgeCV(alphas=alpha_range, cv = 5)
+regressor.fit(train_X, train_y)
+
+
+print('')
+print('Intercept Coefficient')
+print(regressor.intercept_)
+print('')
+
+print('Coefficient Matrix')
+coeff_matrix = pd.DataFrame(regressor.coef_, X.columns,
+                            columns=['Coefficients'])
+print(coeff_matrix)
+print('')
+
+print('R-Squared (i.e. measure of fit)')
+print(regressor.score(X, y))
+print('')
+
+
+
+
+'''
+Train the ridge regression model with all data
+Use for loop to find the best alpha value
+'''
+
+
 alpha_range = np.arange(0, 10.0, 0.1)
 clf_all_score = []
 

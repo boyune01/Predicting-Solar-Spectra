@@ -1,5 +1,13 @@
 # SolarML
 
+
+**
+- What it does
+- sortware dependencies
+- Instructions on how to use the code
+- Examples --> how to work with package
+**
+
 ## Project Description
 This project is an analysis project that aims to study if it is possible to accurately predict the solar spectra given atmospheric parameters. 
 

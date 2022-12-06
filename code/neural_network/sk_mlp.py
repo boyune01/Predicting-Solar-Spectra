@@ -2,8 +2,8 @@ from sklearn.neural_network import MLPRegressor
 from sklearn.model_selection import train_test_split
 import numpy as np
 
-X = np.loadtxt('data\input_cleaned\wea_input.csv', skiprows=1, delimiter=',', usecols=range(1, 14))
-y = np.loadtxt(r'data\input_cleaned\rad_input.csv', skiprows=1, delimiter=',', usecols=range(1, 14))
+X = np.loadtxt('data/input_cleaned/wea_input.csv', skiprows=1, delimiter=',', usecols=range(1, 14))
+y = np.loadtxt('data/input_cleaned/rad_input.csv', skiprows=1, delimiter=',', usecols=range(1, 14))
 
 for i in [X, y]:
     print(type(i), i.shape)

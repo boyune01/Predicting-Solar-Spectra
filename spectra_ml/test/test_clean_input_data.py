@@ -79,3 +79,18 @@ class UnitTests(unittest.TestCase):
         """
         Edge test to check the number of column.
         """
+
+    def test_cull_df_smoke(self):
+        """
+        Smoke test to check there are 2 dataframes.
+        """
+
+    def test_cull_df_edge(self):
+        """
+        Edge test to check there is time stamp (pandas datetime datatype).
+        """
+
+    def save_df_to_csv_smoke(self):
+        """
+        Smoke test to check file_dir exists.
+        """

@@ -10,8 +10,8 @@ from spectra_ml import calc_cct
 
 # data_dir = "/Volumes/GoogleDrive/My Drive
 # /COURSES/22 AU/CSE_583/final_prj/data/raw/"
-rad_data_dir = "../../data/data_for_test/test_rad_df.csv"
-wea_data_dir = "../../data/input_example/2020_wea.csv"
+rad_data_dir = "data/data_for_test/test_rad_df.csv"
+wea_data_dir = "data/input_example/2020_wea.csv"
 
 
 class UnitTests(unittest.TestCase):
@@ -144,7 +144,7 @@ class UnitTests(unittest.TestCase):
         """
         Edge test to check the column names contain 380 to 780 nm.
         """
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
             df = pd.DataFrame()
             df[334] = [0.000000, 0.000000, 0.000000]
             df[335.6] = [-0.008907, -0.003605, -0.004590]
@@ -155,7 +155,7 @@ class UnitTests(unittest.TestCase):
         """
         Edge test to check the interval 1 nm.
         """
-        with self.assertRaise(TypeError):
+        with self.assertRaise(ValueError):
             df = pd.DataFrame()
             df[334] = [0.000000, 0.000000, 0.000000]
             df[335.6] = [-0.008907, -0.003605, -0.004590]

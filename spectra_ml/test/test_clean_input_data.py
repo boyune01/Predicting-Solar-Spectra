@@ -6,7 +6,7 @@ import pandas as pd
 import numpy as np
 
 from spectra_ml import clean_input_data
-from spectrs_ml import calc_cct
+from spectra_ml import calc_cct
 
 # data_dir = "/Volumes/GoogleDrive/My Drive
 # /COURSES/22 AU/CSE_583/final_prj/data/raw/"

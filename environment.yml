@@ -1,4 +1,4 @@
-name: gensolarrad
+name: spectraml
 channels:
   - pytorch
   - defaults

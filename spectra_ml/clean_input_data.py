@@ -3,16 +3,19 @@ This module is used to read in weather and solar spectra data
 (downloaded from NREL website as .csv files) and cleans them
 so that it's ready to be used for ML algorithms.
 The functions in this module perform the following tasks:
-(1) specifc for weather data - Read in multiple .csv data and convert to one pandas dataframe by concatenating them.
+(1) specifc for weather data - Read in multiple .csv data
+and convert to one pandas dataframe by concatenating them.
 (2) Checking and removing rows with duplicate dates and NaN.
-(3) Cull rows of data based on matching timeseries of multiple dataframes.
-(4) specifc for solar spectra data - Read in multiple .csv data and convert to one pandas dataframe by concatenating them.
+(3) Cull rows based on matching timeseries of 2 dataframes.
+(4) specifc for solar spectra data - Read in multiple .csv data
+and convert to one pandas dataframe by concatenating them.
 (5) For solar spectra data only - clean data into 1nm wavelength intervals by interpolating between measured wavelengths.
 (6) Save cleaned pandas dataframes to .csv file.
 """
-
-import pandas as pd
 import os
+
+import numpy as np
+import pandas as pd
 
 
 def read_wea_datas(file_dir, identifier):
@@ -20,7 +23,7 @@ def read_wea_datas(file_dir, identifier):
     Function to read multiple .csv datas and merge them into 1 pandas df.
     INPUT:
     (1) file_dir - directory of .csv files to read and combine in a pandas df.
-    (2) identifier - part of file name that is repeated across all the files. 
+    (2) identifier - part of file name that is repeated across all the files.
     i.e. for files (rad_2018, rad_2019, rad_2020), identifier is 'rad'.
     OUTPUT:
     combined and sorted (based on datetime) pandas df.
@@ -31,7 +34,7 @@ def read_wea_datas(file_dir, identifier):
     # Check files are .csv
     ext = os.path.splitext(files)[-1].lower()
     if ext != ".csv":
-        raise TypeError
+        raise ImportError(f"File type should be .csv")
 
     count = 0
     frames = []
@@ -40,7 +43,7 @@ def read_wea_datas(file_dir, identifier):
         if file.startswith(identifier):
             name = identifier + "_" + "df" + str(count)
             name = pd.read_csv(file_dir + file, on_bad_lines="skip", dtype="float",
-                               header=0, parse_dates=[['DATE (MM/DD/YYYY)', 'MST']])
+                               header=0, parse_dates=[["DATE (MM/DD/YYYY)", "MST"]])
             frames.append(name)
 
     # combine all csv monthly data into a pandas df
@@ -50,7 +53,7 @@ def read_wea_datas(file_dir, identifier):
         combined_df = name
 
     # Change name of the date column
-    combined_df.rename(columns={'DATE (MM/DD/YYYY)_MST': 'date'}, inplace=True)
+    combined_df.rename(columns={"DATE (MM/DD/YYYY)_MST": "date"}, inplace=True)
 
     return combined_df
 
@@ -63,11 +66,11 @@ def drop_dup_nan(df, column):
     (2) column (string) - column in the dataframe to test for duplicates.
     OUTPUT: pandas dataframe
     """
-    print(f'Original dataframe: {len(df)} rows')
+    print(f"Original dataframe: {len(df)} rows")
 
     df_dedup = df.drop_duplicates(subset=column)
-    print(f'De-duplicated dataframe: {len(df_dedup)} rows')
-    print(f'Duplicate entries: {len(df) - len(df_dedup)} rows')
+    print(f"De-duplicated dataframe: {len(df_dedup)} rows")
+    print(f"Duplicate entries: {len(df) - len(df_dedup)} rows")
 
     df_dedup_is_nan = df_dedup.isnull()  # [25000, 8]
     mask = df_dedup_is_nan.sum(axis=1) == 0  # [25000]
@@ -88,11 +91,11 @@ def merge_df(*dataframes):
     and if it doens't match, those rows will be culled.
     """
 
-    # Check there are multiple dataframes
+    # Test - Check there are multiple dataframes
     if len(dataframes) <= 1:
-        raise TypeError
+        raise TypeError(f"There should be more than 1 dataframe to perform merge")
 
-    # Check if there is same column name in dataframes??? Q:Is is necessary? Does not match will be culled?)
+    # # Check if there is same column name in dataframes??? Q:Is is necessary? Does not match will be culled?)
 
     assert len(dataframes) > 1  # this raises error when there is only 1 df
     # 1st element of the list
@@ -110,7 +113,7 @@ def read_rad_datas(file_dir, identifier):
     Radiation data should contain wavelength range between 380nm to 780nm.
     INPUT:
     (1) file_dir - directory of .csv files to read and combine in a pandas df.
-    (2) identifier - part of file name that is repeated across all the files. 
+    (2) identifier - part of file name that is repeated across all the files.
     i.e. for files (rad_2018, rad_2019, rad_2020), identifier is 'rad'.
     OUTPUT:
     combined and sorted (based on datetime) pandas df.
@@ -121,7 +124,7 @@ def read_rad_datas(file_dir, identifier):
     # Check files are .csv
     ext = os.path.splitext(files)[-1].lower()
     if ext != ".csv":
-        raise TypeError
+        raise ImportError(f"File type should be .csv")
 
     count = 0
     frames = []
@@ -151,17 +154,21 @@ def interpolation_1nm(df, wv_len_range):
     OUTPUT - pandas dataframe interpolated (in 1nm interval)
     """
 
-    # Check there is only wavelengh data
-    if rad_df[1] !=
+    # Check there is only wavelengh data (check dtype of each column == float)
+    for i in df.dtypes:
+        if i != float:
+            raise TypeError(f"File should only contain wavelength data of type float")
 
-    # Check the number of columns
+    # Check column names include 380 to 780 nm
+    if wv_len_range[0] > 380 or wv_len_range[1] < 780:
+        raise ValueError(f"File should contain wavelengths inbetween 380 to 780nm")
 
-    # CONVERT TO 1NM INTERVALS USING INTERPOLATION
+    # Convert to 1nm intervals using interpolation
     # create full_wvlen range
     full_wvlen = [float(x) for x in range(wv_len_range[0], wv_len_range[1])]
 
     # change orig_wvlen df header to float from str
-    df.columns = df.columns.astype('float32')
+    df.columns = df.columns.astype("float32")
     orig_wvlen = df.columns.values.tolist()  # get orig_wvlen in to a list
 
     # remove dup wv len from full_wvlen based on orig_wvlen list
@@ -184,7 +191,7 @@ def interpolation_1nm(df, wv_len_range):
     df = df.loc[:, comb_wvlen]
 
     # change dtype from object to numerical (required for df.interpolate)
-    df = df.astype('float32')
+    df = df.astype("float32")
 
     # Interpolate
     df = df.interpolate(method='linear', axis=1)
@@ -205,8 +212,19 @@ def cull_df(df1, df2):
     OUTPUT:
     pandas df
     """
+    # Check there is time stamp (column for date)
+    if len(df1.select_dtypes(include=[np.datetime64])) == 0:
+        raise TypeError(f"Dataframe should include datetime dtype")
+
+    # Check there is column name 'date'
+    col_name1 = list(df1.columns.values)
+    col_name2 = list(df2.columns.values)
+
+    if "date" not in col_name1 or "date" not in col_name2:
+        raise ValueError(f"Dataframes should include column named 'date' containing datetime data")
+
     # create a df with just dates (from 'date' column of df2)
-    date_df = df2['date']
+    date_df = df2["date"]
     date_df = date_df.to_frame()
 
     df = df1.merge(date_df, how='inner')
@@ -223,8 +241,6 @@ def main():
     # Directory containing all data inputs
     data_dir = "/Volumes/GoogleDrive/My Drive/COURSES/22 AU/CSE_583/final_prj/data/raw/"
 
-    wv_len_dir = "../data/ref/rad_wvlen.csv"
-
     # READ AND CLEAN WEATHER DATA INPUT
     # Weather Data
     wea_df = read_wea_datas(data_dir, 'wea')
@@ -240,7 +256,7 @@ def main():
         freq="30T")  # 12:15, 12:45 --> 12:00, 12:30
     prcp_wtr_df = drop_dup_nan(prcp_wtr_df, 'date')
 
-    # Merge all df to have same time (= cull times when there aren't other data)
+    # Merge all df to have same time (cull times when there aren't other data)
     input_df = merge_df(wea_df, prcp_wtr_df, aod_df)
 
     # Check for negative values in weather data
@@ -270,15 +286,17 @@ def main():
     measured_wv_len_df = pd.read_csv(measured_wv_len_dir, header=None)
     # get values of 1st col as list (to be used as new column)
     measured_wv_len_num = measured_wv_len_df[0].values.tolist()
-    measured_wv_len_num.append('date')  # add date to the end
-    rad_df.columns = measured_wv_len_num  # rename columns to match the wv_len_num
+    # add date to the end
+    measured_wv_len_num.append("date")
+    # rename columns to match the wv_len_num
+    rad_df.columns = measured_wv_len_num
 
     # interpolate
     # part of df for spectrum (drop date column)
-    rad_df1 = rad_df.drop(columns=['date'], axis=1)
+    rad_df1 = rad_df.drop(columns=["date"], axis=1)
     interpolated_df = interpolation_1nm(rad_df1, [334, 1076])
     # add back in date (contains date and spectral data in every 1nm)
-    interpolated_df['date'] = rad_df['date']
+    interpolated_df["date"] = rad_df["date"]
 
     # re-order 'date' column to first column
     cols = interpolated_df.columns.tolist()

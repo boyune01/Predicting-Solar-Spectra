@@ -3,12 +3,15 @@ This module is designed to run ridge regressions of wea inputs on cct
 cct is designated as vector y, wea inputs as matrix X
 regression analysis performed using sklearn
 """
+#%matplotlib inline
 
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.linear_model import Ridge
 from sklearn.linear_model import RidgeCV
 from sklearn.model_selection import train_test_split
+
 
 df = pd.read_csv('../../data/input_cleaned/linreg.csv')
 
@@ -19,6 +22,36 @@ X = df[['Zenith Angle [degrees]', 'Azimuth Angle [degrees]',
         'Asymmetry [675nm]',
         'Precipitable Water [mm]']]
 y = df['cct']
+
+
+"""
+plot coefficient-alphas
+"""
+
+
+alpha_range = np.arange(0.1, 10.0, 0.1)
+label_plot=['Zenith Angle [degrees]', 'Azimuth Angle [degrees]',
+        'Total Cloud Cover [%]', 'Opaque Cloud Cover [%]',
+        'AOD [400nm]', 'AOD [500nm]', 'AOD [675nm]',
+        'AOD [870nm]', 'AOD [1020nm]', 'SSA [675nm]',
+        'Asymmetry [675nm]',
+        'Precipitable Water [mm]']
+
+coefs = []
+ridge = Ridge(normalize = True)
+for a in alpha_range:
+    ridge.set_params(alpha = a)
+    ridge.fit(X, y)
+    coefs.append(ridge.coef_)
+
+np.shape(coefs)
+
+ax = plt.gca()
+ax.plot(alpha_range, coefs, label=label_plot)
+plt.title('Ridge Regression')
+plt.xlabel('Alpha')
+plt.ylabel('Coefficients')
+ax.legend(loc=1,fontsize=8)
 
 
 """
@@ -54,8 +87,6 @@ print('')
 print('R-Squared (i.e. measure of fit)')
 print(regressor.score(X, y))
 print('')
-
-
 
 
 """

@@ -1,12 +1,12 @@
 """
 Test function
 """
-import os
 import unittest
 import pandas as pd
 from code import clean_input_data
 
-# data_dir = "/Volumes/GoogleDrive/My Drive/COURSES/22 AU/CSE_583/final_prj/data/raw/"
+# data_dir = "/Volumes/GoogleDrive/My Drive
+# /COURSES/22 AU/CSE_583/final_prj/data/raw/"
 rad_data_dir = "../../data/data_for_test/test_rad_df.csv"
 wea_data_dir = "../../data/input_example/2020_wea.csv"
 
@@ -34,7 +34,7 @@ class UnitTests(unittest.TestCase):
         """
         Smoke test to check the function runs.
         """
-        wea_df = clean_input_data.read_wea_datas(data_dir, 'wea')
+        wea_df = clean_input_data.read_wea_datas(wea_data_dir, 'wea')
         clean_input_data.drop_dup_nan(wea_df, 'date')
         return
 

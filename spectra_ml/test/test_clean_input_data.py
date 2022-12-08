@@ -95,19 +95,20 @@ class UnitTests(unittest.TestCase):
         """
         df = pd.DataFrame()
         clean_input_data.cull_df(df)
-
-    def test_cull_df_edge(self):
-        """
-        Edge test to check there is time stamp (pandas datetime datatype).
-        """
-        with self.assertRaises(V):
-
         return
 
-    def save_df_to_csv_smoke(self):
-        """
-        Smoke test to check file_dir exists.
-        """
-        with self.assertRaises(V):
+    # def test_cull_df_edge(self):
+    #     """
+    #     Edge test to check there is time stamp (pandas datetime datatype).
+    #     """
+    #     with self.assertRaises(V):
 
-        return
+    #     return
+
+    # def save_df_to_csv_smoke(self):
+    #     """
+    #     Smoke test to check file_dir exists.
+    #     """
+    #     with self.assertRaises(V):
+
+    #     return

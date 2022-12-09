@@ -9,7 +9,8 @@ and convert to one pandas dataframe by concatenating them.
 (3) Cull rows based on matching timeseries of 2 dataframes.
 (4) specifc for solar spectra data - Read in multiple .csv data
 and convert to one pandas dataframe by concatenating them.
-(5) For solar spectra data only - clean data into 1nm wavelength intervals by interpolating between measured wavelengths.
+(5) For solar spectra data only - clean data into 1nm wavelength
+intervals by interpolating between measured wavelengths.
 (6) Save cleaned pandas dataframes to .csv file.
 """
 import os
@@ -34,7 +35,7 @@ def read_wea_datas(file_dir, identifier):
     # Check files are .csv
     ext = os.path.splitext(files)[-1].lower()
     if ext != ".csv":
-        raise ImportError(f"File type should be .csv")
+        raise ImportError("File type should be .csv")
 
     count = 0
     frames = []
@@ -42,8 +43,13 @@ def read_wea_datas(file_dir, identifier):
         count += 1
         if file.startswith(identifier):
             name = identifier + "_" + "df" + str(count)
-            name = pd.read_csv(file_dir + file, on_bad_lines="skip", dtype="float",
-                               header=0, parse_dates=[["DATE (MM/DD/YYYY)", "MST"]])
+            name = pd.read_csv(
+                file_dir + file,
+                on_bad_lines="skip",
+                dtype="float",
+                header=0,
+                parse_dates=[["DATE (MM/DD/YYYY)", "MST"]]
+                )
             frames.append(name)
 
     # combine all csv monthly data into a pandas df
@@ -93,11 +99,11 @@ def merge_df(*dataframes):
 
     # Test - Check there are multiple dataframes
     if len(dataframes) <= 1:
-        raise TypeError(f"There should be more than 1 dataframe to perform merge")
+        raise TypeError(
+            "There should be more than 1 dataframe to perform merge"
+            )
+    # assert len(dataframes) > 1  # this raises error when there is only 1 df
 
-    # # Check if there is same column name in dataframes??? Q:Is is necessary? Does not match will be culled?)
-
-    assert len(dataframes) > 1  # this raises error when there is only 1 df
     # 1st element of the list
     df = dataframes[0]
 
@@ -124,7 +130,7 @@ def read_rad_datas(file_dir, identifier):
     # Check files are .csv
     ext = os.path.splitext(files)[-1].lower()
     if ext != ".csv":
-        raise ImportError(f"File type should be .csv")
+        raise ImportError("File type should be .csv")
 
     count = 0
     frames = []
@@ -133,7 +139,11 @@ def read_rad_datas(file_dir, identifier):
         if file.startswith(identifier):
             name = identifier + "_" + "df" + str(count)
             name = pd.read_csv(
-                file_dir + file, on_bad_lines="skip", dtype="float", header=None)
+                file_dir + file,
+                on_bad_lines="skip",
+                dtype="float",
+                header=None
+                )
             frames.append(name)
 
     # combine all csv monthly data into a pandas df
@@ -149,7 +159,8 @@ def interpolation_1nm(df, wv_len_range):
     """
     This is a function to interpolate calibrated spectral data to 1nm interval.
     INPUT:
-    (1) df (pandas df) - containing only the wavelength data (no date / or any other information)
+    (1) df (pandas df) - containing only the wavelength data
+    (no date / or any other information)
     (2) wv_len_range (list) - i.e. [334, 1076].
     OUTPUT - pandas dataframe interpolated (in 1nm interval)
     """
@@ -157,11 +168,13 @@ def interpolation_1nm(df, wv_len_range):
     # Check there is only wavelengh data (check dtype of each column == float)
     for i in df.dtypes:
         if i != float:
-            raise TypeError(f"File should only contain wavelength data of type float")
+            raise TypeError(
+                "File should only contain wavelength data of type float")
 
     # Check column names include 380 to 780 nm
     if wv_len_range[0] > 380 or wv_len_range[1] < 780:
-        raise ValueError(f"File should contain wavelengths inbetween 380 to 780nm")
+        raise ValueError(
+            "File should contain wavelengths inbetween 380 to 780nm")
 
     # Convert to 1nm intervals using interpolation
     # create full_wvlen range
@@ -205,7 +218,8 @@ def interpolation_1nm(df, wv_len_range):
 def cull_df(df1, df2):
     """
     Cull a dataframe based on time stamp of another dataframe.
-    For this function to work, reference dataframe (df2) must have a column called 'date'.
+    For this function to work, reference dataframe (df2) must
+    have a column called 'date'.
     INPUT:
     (1) df1 (pandas df) - dataframe to cull
     (2) df2 (pandas df) - dataframe to reference time stamp
@@ -214,14 +228,15 @@ def cull_df(df1, df2):
     """
     # Check there is time stamp (column for date)
     if len(df1.select_dtypes(include=[np.datetime64])) == 0:
-        raise TypeError(f"Dataframe should include datetime dtype")
+        raise TypeError("Dataframe should include datetime dtype")
 
     # Check there is column name 'date'
     col_name1 = list(df1.columns.values)
     col_name2 = list(df2.columns.values)
 
     if "date" not in col_name1 or "date" not in col_name2:
-        raise ValueError(f"Dataframes should include column named 'date' containing datetime data")
+        raise ValueError(
+            "Dataframes should include column named 'date'")
 
     # create a df with just dates (from 'date' column of df2)
     date_df = df2["date"]
@@ -239,7 +254,8 @@ def save_df_to_csv(df, file_dir):
 def main():
     # DATA INPUT
     # Directory containing all data inputs
-    data_dir = "/Volumes/GoogleDrive/My Drive/COURSES/22 AU/CSE_583/final_prj/data/raw/"
+    data_dir = "/Volumes/GoogleDrive/My Drive/COURSES/" \
+               + "22 AU/CSE_583/final_prj/data/raw/"
 
     # READ AND CLEAN WEATHER DATA INPUT
     # Weather Data

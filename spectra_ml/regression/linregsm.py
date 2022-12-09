@@ -1,6 +1,7 @@
 """
 This module is designed to run linear regressions of wea inputs on cct
 cct is designated as vector y, wea inputs as matrix X
+matrix X contains a restricted set of wea inputs to account for collinearity
 regression analysis performed using statsmodels
 """
 
@@ -18,11 +19,9 @@ df = pd.read_csv('../../data/input_cleaned/linreg.csv')
 print(df)
 
 X = df[['Zenith Angle [degrees]', 'Azimuth Angle [degrees]',
-        'Total Cloud Cover [%]', 'Opaque Cloud Cover [%]',
-        'AOD [400nm]', 'AOD [500nm]', 'AOD [675nm]',
-        'AOD [870nm]', 'AOD [1020nm]', 'SSA [675nm]',
-        'Asymmetry [675nm]',
-        'Precipitable Water [mm]']]
+          'Total Cloud Cover [%]',
+          'AOD [675nm]', 'SSA [675nm]', 'Asymmetry [675nm]',
+          'Precipitable Water [mm]']]
 y = df['cct']
 
 """

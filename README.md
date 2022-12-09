@@ -1,5 +1,7 @@
 # SolarML
 
+[![Python Package using Conda](https://github.com/boyune01/Predicting-Solar-Spectra/actions/workflows/python-package-conda.yml/badge.svg)](https://github.com/boyune01/Predicting-Solar-Spectra/actions/workflows/python-package-conda.yml)
+
 FINISH BY WEDNESDAY NIGHT
 
 - Add tree (repository structure)

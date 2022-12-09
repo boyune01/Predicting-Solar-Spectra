@@ -1,8 +1,8 @@
+import numpy as np
 import torch
 from torch import nn
-import numpy as np
-from sklearn.model_selection import train_test_split
 
+# Load weather and radience data into arrays
 X = np.loadtxt('data/input_cleaned/wea_input.csv', skiprows=1, delimiter=',', usecols=range(1, 14))
 y = np.loadtxt('data/input_cleaned/rad_input.csv', skiprows=1, delimiter=',', usecols=range(1, 14))
 
@@ -10,6 +10,7 @@ for i in [X, y]:
     print(type(i), i.shape)
 
 class Perceptron(torch.nn.Module):
+    """Initializes perceptron with ReLU activation function"""
     def __init__(self):
         super(Perceptron, self).__init__()
         self.fc = nn.Linear(1,1)
@@ -20,6 +21,7 @@ class Perceptron(torch.nn.Module):
         return output
 
 class FeedForward(torch.nn.Module):
+    """Defines forward feed object with (input_size) nodes and (hidden_size) layers"""
     def __init__(self, input_size, hidden_size):
         super(FeedForward, self).__init__()
         self.input_size = input_size
@@ -36,9 +38,7 @@ class FeedForward(torch.nn.Module):
         return output
 
 class MLP(nn.Module):
-    '''
-    Multilayer Perceptron for regression.
-    '''
+    """Multilayer Perceptron for regression"""
     def __init__(self):
         super().__init__()
         self.layers = nn.Sequential(
@@ -49,6 +49,7 @@ class MLP(nn.Module):
             nn.Linear(32, 1)
         )
 
+# Separate weather and radiance data into train and test with an 80-20 split
 X_train_size = int(0.8 * len(X))
 X_test_size = len(X) - X_train_size
 y_train_size = int(0.8 * len(y))
@@ -67,7 +68,7 @@ X_test = torch.FloatTensor(X_test)
 y_train = torch.FloatTensor(y_train)
 y_test = torch.FloatTensor(y_test)
 
-model = FeedForward(2, 10)
+model = FeedForward(13, 2)
 criterion = torch.nn.MSELoss()
 optimizer = torch.optim.SGD(model.parameters(), lr = 0.01)
 
@@ -75,7 +76,6 @@ model.eval()
 y_pred = model(X_test)
 before_train = criterion(y_pred.squeeze(), y_test)
 print("Test loss before training", before_train.item())
-
 
 """
 model = FeedForward(2, 10)

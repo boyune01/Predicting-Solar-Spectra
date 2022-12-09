@@ -43,26 +43,20 @@ print('')
 results = (est2.summary().tables[1])
 print(results)
 
-
 """
-sklearn approach
-prints regression coefficients as well as R-Squared
-Not as thorough as statsmodels, I don't know why we'd use this
+limiting number of variables to account for mulitcollinearity
 """
 
-regr = linear_model.LinearRegression()
-regr.fit(X, y)
+Xsm = df[['Zenith Angle [degrees]', 'Azimuth Angle [degrees]',
+          'Total Cloud Cover [%]',
+          'AOD [675nm]', 'SSA [675nm]', 'Asymmetry [675nm]',
+          'Precipitable Water [mm]']]
+
+X2sm = sm.add_constant(Xsm)
+estsm = sm.OLS(y, X2sm)
+est2sm = estsm.fit()
+print(est2sm.summary())
 
 print('')
-print('Intercept Coefficient')
-print(regr.intercept_)
-print('')
-
-print('Coefficient Matrix')
-cdf = pd.DataFrame(regr.coef_, X.columns, columns=['Coefficients'])
-print(cdf)
-print('')
-
-print('R-Squared (i.e. measure of fit)')
-print(regr.score(X, y))
-print('')
+resultssm = (est2sm.summary().tables[1])
+print(resultssm)

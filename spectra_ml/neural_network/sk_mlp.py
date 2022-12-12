@@ -1,9 +1,9 @@
 import matplotlib
 import matplotlib.pyplot as plt
-matplotlib.use('pdf')
 import numpy as np
 from sklearn.neural_network import MLPRegressor
 from sklearn.model_selection import train_test_split
+matplotlib.use('pdf')
 
 # Load weather and radience data into arrays
 X = np.loadtxt('data/input_cleaned/wea_input.csv', skiprows=1, delimiter=',', usecols=range(1, 14))
@@ -16,7 +16,14 @@ for i in [X, y]:
 X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.8, random_state=1)
 
 # Initialize neural network with two 64-node hidden layers
-reg = MLPRegressor(hidden_layer_sizes=(64, 64), activation='relu', random_state=1, max_iter=1000, early_stopping=True).fit(X_train, y_train)
+reg = MLPRegressor(
+    hidden_layer_sizes=(64, 64),
+    activation='relu',
+    random_state=1,
+    max_iter=1000,
+    early_stopping=True
+    ).fit(X_train, y_train)
+
 pred = reg.predict(X_test)
 print("Prediction shape:", pred.shape)
 acc = reg.score(X_test, y_test)

@@ -33,9 +33,14 @@ def read_wea_datas(file_dir, identifier):
     files = sorted(files)
 
     # Check files are .csv
-    ext = os.path.splitext(files)[-1].lower()
-    if ext != ".csv":
-        raise ImportError("File type should be .csv")
+    # for loop
+    # check ends with for each 
+    for file in files:
+        if not file.endswith(".csv"):
+            raise ValueError("File type should be .csv")
+    # ext = os.path.splitext(files)[-1].lower()
+    # if ext != ".csv":
+    #     raise ImportError("File type should be .csv")
 
     count = 0
     frames = []
@@ -48,7 +53,7 @@ def read_wea_datas(file_dir, identifier):
                 on_bad_lines="skip",
                 dtype="float",
                 header=0,
-                parse_dates=[["DATE (MM/DD/YYYY)", "MST"]]
+                parse_dates={"date": ["DATE (MM/DD/YYYY)", "MST"]}
                 )
             frames.append(name)
 
@@ -56,10 +61,10 @@ def read_wea_datas(file_dir, identifier):
     if len(frames) > 1:
         combined_df = pd.concat(frames)  # if there is multiple frames, concat
     else:
-        combined_df = name
+        combined_df = identifier + "_" + "df"
 
     # Change name of the date column
-    combined_df.rename(columns={"DATE (MM/DD/YYYY)_MST": "date"}, inplace=True)
+    # combined_df.rename(columns={"DATE (MM/DD/YYYY)_MST": "date"}, inplace=True)
 
     return combined_df
 
@@ -127,10 +132,15 @@ def read_rad_datas(file_dir, identifier):
     files = os.listdir(file_dir)
     files = sorted(files)
 
+    if len(files) == 0:
+        raise TypeError("There should be atleast 1 file to run this function")
+
+
     # Check files are .csv
-    ext = os.path.splitext(files)[-1].lower()
-    if ext != ".csv":
-        raise ImportError("File type should be .csv")
+    for file in files:
+        # print(file)
+        if not file.endswith(".csv"):
+            raise ValueError("File type should be .csv")
 
     count = 0
     frames = []
@@ -150,7 +160,7 @@ def read_rad_datas(file_dir, identifier):
     if len(frames) > 1:
         combined_df = pd.concat(frames)  # if there is multiple frames, concat
     else:
-        combined_df = name
+        combined_df = identifier + "_" + "df"
 
     return combined_df
 

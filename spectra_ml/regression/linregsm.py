@@ -1,7 +1,9 @@
 """
 Module to run linear regressions of weather inputs on CCT.
-CCT is designated as a vector y, weather inputs as matrix X.
-Regression analysis performed using statsmodels.
+CCT is designated as a vector y, weather inputs as a
+matrix X. Matrix X contains a restricted set of weather
+inputs to account for collinearity regression analysis
+performed using statsmodels.
 """
 
 import pandas as pd
@@ -18,11 +20,9 @@ df = pd.read_csv('../../data/input_cleaned/linreg.csv')
 print(df)
 
 X = df[['Zenith Angle [degrees]', 'Azimuth Angle [degrees]',
-        'Total Cloud Cover [%]', 'Opaque Cloud Cover [%]',
-        'AOD [400nm]', 'AOD [500nm]', 'AOD [675nm]',
-        'AOD [870nm]', 'AOD [1020nm]', 'SSA [675nm]',
-        'Asymmetry [675nm]',
-        'Precipitable Water [mm]']]
+          'Total Cloud Cover [%]',
+          'AOD [675nm]', 'SSA [675nm]', 'Asymmetry [675nm]',
+          'Precipitable Water [mm]']]
 y = df['cct']
 
 """

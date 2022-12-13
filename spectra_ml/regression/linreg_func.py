@@ -9,9 +9,9 @@ import statsmodels.api as sm
 
 pd.set_option('display.max_columns', None)
 
+
 # define linreg function
 def linreg(df):
-
 
     print(df)
 

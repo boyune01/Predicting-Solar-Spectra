@@ -49,13 +49,15 @@
 	- Code that originally trained model and found estimation parameters
 	- Will need to match solar spectra data to weather data
 	- ML approach to train model
-- User interface? - Most likely a python module that defines a function to be run on user's data
-- Function - Input weather data
-	- Change .csv to pandas dataframe
-	- Combine based on same timeseries
-- Function - Input time period
-	- Output series of time periods given start and end date
-- Function - Input spectral range (used for output spectral range)
-	- Create range to put into the output
-- Function
-	- Output series of vector of spectra data
+
+## Future milestones
+- Module - Defining  function to be run on user's atmospheric data that predicts solar spectral output
+	- Function - Input weather data
+		- Change .csv to pandas dataframe
+		- Combine based on same timeseries
+	- Function - Input time period
+		- Output series of time periods given start and end date
+	- Function - Input spectral range (used for output spectral range)
+		- Create range to put into the output
+	- Function
+		- Output series of vector of spectra data

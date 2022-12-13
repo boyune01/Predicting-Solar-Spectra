@@ -50,7 +50,7 @@ The training data comes from [NREL Solar Radiation Research Laboratory](https://
 ### (1) Atmospheric Parameters
 Atmospheric data used for training are specific data that contributes to color of the sky through scattering. 
 
-#### A. [weather data](https://midcdmz.nrel.gov/apps/day.pl?BMS)
+#### A. [Weather data](https://midcdmz.nrel.gov/apps/day.pl?BMS)
 1. **Zenith Angle** The angle between the sun and the vertical (degrees)
 2. **Azimuth Angle** The angle between true North and the sun (degrees)
 3. **Total Cloud Cover** How much cloud there is in a fisheye image of the sky (percentage)

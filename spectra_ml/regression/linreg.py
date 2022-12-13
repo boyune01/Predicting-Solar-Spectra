@@ -1,7 +1,7 @@
 """
-This module is designed to run linear regressions of wea inputs on cct
-cct is designated as vector y, wea inputs as matrix X
-regression analysis performed using statsmodels
+Module to run linear regressions of weather inputs on CCT.
+CCT is designated as a vector y, weather inputs as matrix X.
+Regression analysis performed using statsmodels.
 """
 
 import pandas as pd

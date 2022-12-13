@@ -1,18 +1,18 @@
 """
 Module to do the unittests.
 """
-import unittest
-import pandas as pd
 import numpy as np
+import pandas as pd
+import unittest
 
 from spectra_ml import clean_input_data
 from spectra_ml import calc_cct
 
-# data_dir = "/Volumes/GoogleDrive/My Drive
-# /COURSES/22 AU/CSE_583/final_prj/data/raw/"
-rad_data_dir = "data/data_for_test/test_rad_df.csv"
-wea_data_dir = "data/input_example/2020_wea.csv"
 
+rad_data_dir = "data/data_for_test/"
+wea_data_dir = "data/input_example/2020_wea.csv"
+precip_data_dir = "data/input_example/2020_precipitable_water.csv"
+data_dir = "data/input_example/"
 
 class UnitTests(unittest.TestCase):
 
@@ -20,16 +20,15 @@ class UnitTests(unittest.TestCase):
         """
         Smoke test to check the function runs.
         """
-        file_dir = wea_data_dir
-        clean_input_data.read_wea_datas(file_dir, 'wea')
+        clean_input_data.read_wea_datas(data_dir, 'wea')
         return
 
     def test_read_wea_datas_edge(self):
         """
         Edge test to test for .csv format
         """
-        with self.assertRaises(TypeError):
-            file_dir = ""
+        with self.assertRaises(ValueError):
+            file_dir = "docs"
             clean_input_data.read_wea_datas(file_dir, 'wea')
         return
 
@@ -37,8 +36,11 @@ class UnitTests(unittest.TestCase):
         """
         Smoke test to check the function runs.
         """
-        wea_df = clean_input_data.read_wea_datas(wea_data_dir, 'wea')
-        clean_input_data.drop_dup_nan(wea_df, 'date')
+        df = pd.read_csv(
+                wea_data_dir,
+                parse_dates={"date":["DATE (MM/DD/YYYY)", "MST"]}
+                )
+        clean_input_data.drop_dup_nan(df, 'date')
         return
 
     def test_merge_df_edge(self):
@@ -54,16 +56,15 @@ class UnitTests(unittest.TestCase):
         """
         Smoke test to check the function runs.
         """
-        file_dir = rad_data_dir
-        clean_input_data.read_rad_datas(file_dir, 'rad')
+        clean_input_data.read_rad_datas(rad_data_dir, 'rad')
         return
 
     def test_read_rad_datas_edge(self):
         """
         Edge test to test for .csv format.
         """
-        with self.assertRaises(TypeError):
-            file_dir = "../docs"
+        with self.assertRaises(ValueError):
+            file_dir = "docs"
             clean_input_data.read_rad_datas(file_dir, 'rad')
         return
 
@@ -96,15 +97,24 @@ class UnitTests(unittest.TestCase):
         """
         Smoke test to check there are 2 dataframes.
         """
-        df = pd.DataFrame()
-        clean_input_data.cull_df(df)
+        df1 = pd.read_csv(
+                wea_data_dir,
+                parse_dates={"date":["DATE (MM/DD/YYYY)", "MST"]}
+                )
+
+        df2 = pd.read_csv(
+                precip_data_dir,
+                parse_dates={"date":["DATE (MM/DD/YYYY)", "MST"]}
+                )
+
+        clean_input_data.cull_df(df1, df2)
         return
 
     def test_cull_df_edge1(self):
         """
         Edge test to check there is a column name "date".
         """
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             df1 = pd.DataFrame()
             df2 = pd.DataFrame()
             clean_input_data.cull_df(df1, df2)
@@ -133,7 +143,7 @@ class UnitTests(unittest.TestCase):
         """
         Smoke test to check the fuction run.
         """
-        spectral_data = "../data/input_cleaned/rad_input.csv"
+        spectral_data = "data/input_cleaned/rad_input.csv"
         spd_df = pd.read_csv(spectral_data, header=0, index_col=0)
         cct_df = calc_cct.calc_cct(spd_df)
         save_dir = "../data/input_cleaned/cct_input.csv"

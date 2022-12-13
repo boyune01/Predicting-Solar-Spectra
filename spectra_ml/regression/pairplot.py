@@ -1,8 +1,7 @@
 """
-This module is designed to check wea inputs for colinearity
-wea inputs as matrix X
-pairplot function using seaborn allows ofr visual assessment of data 
-result?
+Module to check weather inputs for colinearity. Matrix X stores
+the Weather. A pairplot function using seaborn allows for visual
+assessment of data result.
 """
 
 import pandas as pd

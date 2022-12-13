@@ -3,7 +3,7 @@ This module is designed to run ridge regressions of wea inputs on cct
 cct is designated as vector y, wea inputs as matrix X
 regression analysis performed using sklearn
 """
-#%matplotlib inline
+# %matplotlib inline
 
 import pandas as pd
 import numpy as np
@@ -30,17 +30,16 @@ plot coefficient-alphas
 
 
 alpha_range = np.arange(0.1, 10.0, 0.1)
-label_plot=['Zenith Angle [degrees]', 'Azimuth Angle [degrees]',
-        'Total Cloud Cover [%]', 'Opaque Cloud Cover [%]',
-        'AOD [400nm]', 'AOD [500nm]', 'AOD [675nm]',
-        'AOD [870nm]', 'AOD [1020nm]', 'SSA [675nm]',
-        'Asymmetry [675nm]',
-        'Precipitable Water [mm]']
+label_plot = ['Zenith Angle [degrees]', 'Azimuth Angle [degrees]',
+              'Total Cloud Cover [%]', 'Opaque Cloud Cover [%]',
+              'AOD [400nm]', 'AOD [500nm]', 'AOD [675nm]',
+              'AOD [870nm]', 'AOD [1020nm]', 'SSA [675nm]',
+              'Asymmetry [675nm]', 'Precipitable Water [mm]']
 
 coefs = []
-ridge = Ridge(normalize = True)
+ridge = Ridge(normalize=True)
 for a in alpha_range:
-    ridge.set_params(alpha = a)
+    ridge.set_params(alpha=a)
     ridge.fit(X, y)
     coefs.append(ridge.coef_)
 
@@ -51,7 +50,7 @@ ax.plot(alpha_range, coefs, label=label_plot)
 plt.title('Ridge Regression')
 plt.xlabel('Alpha')
 plt.ylabel('Coefficients')
-ax.legend(loc=1,fontsize=8)
+ax.legend(loc=1, fontsize=8)
 
 
 """
@@ -69,7 +68,7 @@ alpha_range = np.arange(0.1, 10.0, 0.1)
 train_X, test_X, train_y, test_y = train_test_split(X, y, test_size=0.2,
                                                     random_state=0)
 
-regressor = RidgeCV(alphas=alpha_range, cv = 5)
+regressor = RidgeCV(alphas=alpha_range, cv=5)
 regressor.fit(train_X, train_y)
 
 
@@ -99,14 +98,14 @@ alpha_range = np.arange(0, 10.0, 0.1)
 clf_all_score = []
 
 for i in alpha_range:
-    clf = Ridge(alpha = i)
+    clf = Ridge(alpha=i)
     clf.fit(X, y)
     clf_all_score.append(clf.score(X, y))
 
 print('Max value :', max(clf_all_score))
 print('Alpha :', alpha_range[clf_all_score.index(max(clf_all_score))])
 
-clf = Ridge(alpha = alpha_range[clf_all_score.index(max(clf_all_score))])
+clf = Ridge(alpha=alpha_range[clf_all_score.index(max(clf_all_score))])
 clf.fit(X, y)
 
 print('')

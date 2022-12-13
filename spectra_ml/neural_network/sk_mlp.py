@@ -1,9 +1,9 @@
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.neural_network import MLPRegressor
-from sklearn.model_selection import learning_curve
-from sklearn.model_selection import validation_curve
 from sklearn.model_selection import train_test_split
+matplotlib.use('pdf')
 
 # Load weather and radience data into arrays
 X = np.loadtxt('data/input_cleaned/wea_input.csv', skiprows=1, delimiter=',', usecols=range(1, 14))
@@ -16,54 +16,46 @@ for i in [X, y]:
 X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.8, random_state=1)
 
 # Initialize neural network with two 64-node hidden layers
-reg = MLPRegressor(hidden_layer_sizes=(64, 64), activation='relu', random_state=1, max_iter=1000).fit(X_train, y_train)
+reg = MLPRegressor(
+    hidden_layer_sizes=(64, 64),
+    activation='relu',
+    random_state=1,
+    max_iter=1000,
+    early_stopping=True
+    ).fit(X_train, y_train)
+
 pred = reg.predict(X_test)
 print("Prediction shape:", pred.shape)
 acc = reg.score(X_test, y_test)
 print(acc)
 
+# Save training loss plot to root directory
 fig, ax = plt.subplots()
-plt.show()
-
-"""
-alphas = np.logspace(-5, 1, 60)
-train_errors = list()
-test_errors = list()
-for alpha in alphas:
-    reg.set_params(alpha=alpha)
-    reg.fit(X_train, y_train)
-    train_errors.append(reg.score(X_train, y_train))
-    test_errors.append(reg.score(X_test, y_test))
-
-i_alpha_optim = np.argmax(test_errors)
-alpha_optim = alphas[i_alpha_optim]
-print("Optimal regularization parameter : %s" % alpha_optim)
-
-reg.set_params(alpha=alpha_optim)
-coef_ = reg.fit(X, y).coef_
-
-
-plt.subplot(2, 1, 1)
-plt.semilogx(alphas, train_errors, label="Train")
-plt.semilogx(alphas, test_errors, label="Test")
-plt.vlines(
-    alpha_optim,
-    plt.ylim()[0],
-    np.max(test_errors),
-    color="k",
-    linewidth=3,
-    label="Optimum on test",
-)
-plt.legend(loc="lower right")
-plt.ylim([0, 1.2])
-plt.xlabel("Regularization parameter")
-plt.ylabel("Performance")
-
-# Show estimated coef_ vs true coef
-plt.subplot(2, 1, 2)
-plt.plot(reg, label="True coef")
-plt.plot(coef_, label="Estimated coef")
+plt.plot(reg.loss_curve_, label='Training')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.title('MLP Regression Training Loss Plot')
 plt.legend()
-plt.subplots_adjust(0.09, 0.04, 0.94, 0.94, 0.26, 0.26)
-plt.show()
+plt.savefig('mlp_train_loss.png')
+
+# Save validation loss plot to root directory
+fig, ax = plt.subplots()
+reg.fit(X_test, y_test)
+plt.plot(reg.loss_curve_, label='Validation', color='orange')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.title('MLP Regression Validation Loss Plot')
+plt.legend()
+plt.savefig('mlp_valid_loss.png')
+
+# Alternative implementation with both curves on same plot
+"""
+fig, ax = plt.subplots()
+plt.plot(reg.loss_curve_, label='Training')
+plt.plot(reg.validation_scores_, label='Validation')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.title('MLP Regression Loss Plot')
+plt.legend()
+plt.savefig('mlp_loss.png')
 """

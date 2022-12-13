@@ -23,7 +23,6 @@ def linreg(df):
             'Precipitable Water [mm]']]
     y = df['cct']
 
-
     """
     statsmodels approach
     returns table of results including params and significance
@@ -39,6 +38,7 @@ def linreg(df):
     print('')
     results = (est2.summary().tables[1])
     print(results)
+
 
 # reading in data and defining X matrix & y vector
 df = pd.read_csv('../../data/input_cleaned/linreg.csv')

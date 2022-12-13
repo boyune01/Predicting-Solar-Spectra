@@ -33,14 +33,9 @@ def read_wea_datas(file_dir, identifier):
     files = sorted(files)
 
     # Check files are .csv
-    # for loop
-    # check ends with for each 
     for file in files:
         if not file.endswith(".csv"):
             raise ValueError("File type should be .csv")
-    # ext = os.path.splitext(files)[-1].lower()
-    # if ext != ".csv":
-    #     raise ImportError("File type should be .csv")
 
     count = 0
     frames = []
@@ -62,9 +57,6 @@ def read_wea_datas(file_dir, identifier):
         combined_df = pd.concat(frames)  # if there is multiple frames, concat
     else:
         combined_df = identifier + "_" + "df"
-
-    # Change name of the date column
-    # combined_df.rename(columns={"DATE (MM/DD/YYYY)_MST": "date"}, inplace=True)
 
     return combined_df
 
@@ -100,6 +92,8 @@ def merge_df(*dataframes):
     with same name (which is the column used to merge).
     This function will check for same data from the column
     and if it doens't match, those rows will be culled.
+    INPUT: Any number of pandas dataframes
+    OUTPUT: pandas dataframe
     """
 
     # Test - Check there are multiple dataframes
@@ -132,9 +126,9 @@ def read_rad_datas(file_dir, identifier):
     files = os.listdir(file_dir)
     files = sorted(files)
 
+    # Check there is atleast 1 file
     if len(files) == 0:
         raise TypeError("There should be atleast 1 file to run this function")
-
 
     # Check files are .csv
     for file in files:
@@ -234,7 +228,7 @@ def cull_df(df1, df2):
     (1) df1 (pandas df) - dataframe to cull
     (2) df2 (pandas df) - dataframe to reference time stamp
     OUTPUT:
-    pandas df
+    pandas dataframe
     """
     # Check there is time stamp (column for date)
     if len(df1.select_dtypes(include=[np.datetime64])) == 0:

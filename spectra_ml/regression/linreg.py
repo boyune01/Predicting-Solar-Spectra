@@ -9,11 +9,7 @@ import statsmodels.api as sm
 
 pd.set_option('display.max_columns', None)
 
-
-"""
-reading in data and defining X matrix & y vector
-"""
-
+# reading in data and defining X matrix & y vector
 df = pd.read_csv('../../data/input_cleaned/linreg.csv')
 print(df)
 
@@ -24,6 +20,7 @@ X = df[['Zenith Angle [degrees]', 'Azimuth Angle [degrees]',
         'Asymmetry [675nm]',
         'Precipitable Water [mm]']]
 y = df['cct']
+
 
 """
 statsmodels approach

@@ -51,27 +51,27 @@ The training data comes from [NREL Solar Radiation Research Laboratory](https://
 Atmospheric data used for training are specific data that contributes to color of the sky through scattering. 
 
 #### A. [weather data](https://midcdmz.nrel.gov/apps/day.pl?BMS)
-1. **Zenith Angle** 
-2. **Azimuth Angle**
-3. **Total Cloud Cover**: How much cloud there is in a fisheye image of the sky.
-4. **Opaque Cloud Cover** How much thick cloud there is in a fisheye image of the sky.
+1. **Zenith Angle** The angle between the sun and the vertical (degrees)
+2. **Azimuth Angle** The angle between true North and the sun (degrees)
+3. **Total Cloud Cover** How much cloud there is in a fisheye image of the sky (percentage)
+4. **Opaque Cloud Cover** How much thick cloud there is in a fisheye image of the sky (percentage)
 
 #### B. [Aerosol Optical Depth (AOD)](https://midcdmz.nrel.gov/apps/daily.pl?site=AODSRRL1S&start=20150701&yr=2021&mo=9&dy=19) <br>
-AOD is a measure of aerosols distributed within a column of air at a particular wavelength (i.e. 400nm). Measurement of Aerosols at different wavelength is related to the size distribution of the particles which affects scattering (thus color) of light. The following wavelengths are accounted for in the training data:
+AOD is a measure of aerosols distributed within a column of air at a particular wavelength (i.e. 400nm). Measurement of Aerosols at different wavelength is related to the size distribution of the particles which affects scattering (thus color) of light. The following wavelengths are accounted for as separate variables in the training data:
 
-5. **AOD 400**
-6. **AOD 500**
-7. **AOD 675**
-8. **AOD 870**
-9. **AOD 1020**
+5. **AOD** (400nm)
+6. **AOD** (500nm)
+7. **AOD** (675nm)
+8. **AOD** (870nm)
+9. **AOD** (1020nm)
 
 #### C. [Additional Scattering Data](https://midcdmz.nrel.gov/apps/daily.pl?site=AODSRRL1S&start=20150701&yr=2021&mo=9&dy=19) <br>
-11. **SSA 675**: Single Scattering Albedo(SSA) represents the ratio of scattering efficiency to total extinction efficiency. Value of 1 means all particle extinction is due to scattering while 0 means all particle extinction is due to absorption. 675 represents SSA at 675nm wavelength.
-12. **Asymmetry 675**: Value showing how much back scattering happens. 675 represents Asymmetry at 675nm wavelength.
+10. **Single Scattering Albedo** (or **SSA**) represents the ratio of scattering efficiency to total extinction efficiency. Value of 1 means all particle extinction is due to scattering while 0 means all particle extinction is due to absorption. 675 represents SSA at 675nm wavelength.
+11. **Asymmetry** Value showing how much back scattering happens. 675 represents Asymmetry at 675nm wavelength.
 
 #### D. [Precipitable Water](https://midcdmz.nrel.gov/apps/daily.pl?site=PWVSRRL&live=1)
 
-12. **Precipitable Water**: This data represents how much water (in any form such as ice, water, water vapor etc.) is in a column of air.
+12. **Precipitable Water** This data represents how much water (in any form such as ice, water, water vapor etc.) is in a column of air (millimeters)
 
 Above 12 parameters are atmospheric weather data that is used to predict the solar spectra. Users are expected to input these parameters in order to get solar spectra as an output.
 
@@ -79,4 +79,21 @@ Above 12 parameters are atmospheric weather data that is used to predict the sol
 
 This data shows radiation data (in unit of W/m<sup>2</sup>) for every nm. The wavelength ranges from 350nm to 1050nm. This spectral data represents the color of the sun.
 
+## Software
 
+The modules included in this package are designed to be run via python on any atmospheric data containing the variables specifed above. The predict function requires only that the pandas (1.5.1) package be installed. Evaluation of the modeling code itself additionally requires the following packages: pytorch (1.13.0), scikit-learn (1.1.3), scipy (1.9.3), seaborn (0.12.1) and statsmodels (0.13.2).
+
+Execution of prediction code will require variables to be named precisely. The list below specifes the necessary variable names. 
+
+1. **Zenith Angle** - "Zenith Angle [degrees]"
+2. **Azimuth Angle** - "Azimuth Angle [degrees]"
+3. **Total Cloud Cover** - "Total Cloud Cover [%]"
+4. **Opaque Cloud Cover** - "Opaque Cloud Cover [%]"
+5. **AOD** (400nm) - "AOD [400nm]"
+6. **AOD** (500nm) - "AOD [500nm]"
+7. **AOD** (675nm) - "AOD [675nm]"
+8. **AOD** (870nm) - "AOD [870nm]"
+9. **AOD** (1020nm) - "AOD [1020nm]"
+10. **SSA** - "SSA [675nm]"
+11. **Asymmetry** - "Asymmetry [675nm]"
+12. **Precipitable Water** - "Precipitable Water [mm]"

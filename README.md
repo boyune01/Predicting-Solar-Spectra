@@ -58,6 +58,7 @@ Atmospheric data used for training are specific data that contributes to color o
 
 #### B. [Aerosol Optical Depth (AOD)](https://midcdmz.nrel.gov/apps/daily.pl?site=AODSRRL1S&start=20150701&yr=2021&mo=9&dy=19) <br>
 AOD is a measure of aerosols distributed within a column of air at a particular wavelength (i.e. 400nm). Measurement of Aerosols at different wavelength is related to the size distribution of the particles which affects scattering (thus color) of light. The following wavelengths are accounted for in the training data:
+
 5. **AOD 400**
 6. **AOD 500**
 7. **AOD 675**

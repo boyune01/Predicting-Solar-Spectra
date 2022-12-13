@@ -79,6 +79,8 @@ Above 12 parameters are atmospheric weather data that is used to predict the sol
 
 This data shows radiation data (in unit of W/m<sup>2</sup>) for every nm. The wavelength ranges from 350nm to 1050nm. This spectral data represents the color of the sun.
 
+For linear regression analysis, a the range of wavelength measurements comprising the solar spectra at each time interval are compressed into a single scalar value. **Correlated Color Temperature** (or **CCT**) provides a single value which corresponds to the predominant color of light as the sun's angle and other atmospheric conditions change over time. 
+
 ## Software
 
 The modules included in this package are designed to be run via python on any atmospheric data containing the variables specifed above. The predict function requires only that the pandas (1.5.1) package be installed. Evaluation of the modeling code itself additionally requires the following packages: pytorch (1.13.0), scikit-learn (1.1.3), scipy (1.9.3), seaborn (0.12.1) and statsmodels (0.13.2).

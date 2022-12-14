@@ -8,11 +8,9 @@ performed using statsmodels.
 
 import pandas as pd
 import statsmodels.api as sm
-
 pd.set_option('display.max_columns', None)
 
-
-# define linreg function
+# Define linreg function
 def linreg(df):
 
     print(df)
@@ -40,8 +38,8 @@ def linreg(df):
     print(results)
 
 
-# reading in data and defining X matrix & y vector
+# Reading in data and defining X matrix & y vector
 df = pd.read_csv('../../data/input_cleaned/linreg.csv')
 
-# run linreg function
+# Run linreg function
 linreg(df)

@@ -9,10 +9,14 @@ import statsmodels.api as sm
 
 pd.set_option('display.max_columns', None)
 
-
-# define linreg function
+# Define linreg function
 def linreg(df):
-
+    """
+    Statsmodels approach:
+    Returns table of results including params and significance
+    as well as general evaluations of regression fitness
+    prints results and creates 'results' as dataframe.
+    """
     print(df)
 
     X = df[['Zenith Angle [degrees]', 'Azimuth Angle [degrees]',
@@ -22,13 +26,6 @@ def linreg(df):
             'Asymmetry [675nm]',
             'Precipitable Water [mm]']]
     y = df['cct']
-
-    """
-    statsmodels approach
-    returns table of results including params and significance
-    as well as general evaluations of regression fitness
-    prints results and creates 'results' as dataframe
-    """
 
     X2 = sm.add_constant(X)
     est = sm.OLS(y, X2)
@@ -40,8 +37,8 @@ def linreg(df):
     print(results)
 
 
-# reading in data and defining X matrix & y vector
+# Reading in data and defining X matrix & y vector
 df = pd.read_csv('../../data/input_cleaned/linreg.csv')
 
-# run linreg function
+# Run linreg function
 linreg(df)

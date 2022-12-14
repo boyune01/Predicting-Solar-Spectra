@@ -2,12 +2,8 @@
 
 [![Python Package using Conda](https://github.com/boyune01/Predicting-Solar-Spectra/actions/workflows/python-package-conda.yml/badge.svg)](https://github.com/boyune01/Predicting-Solar-Spectra/actions/workflows/python-package-conda.yml)
 
-- Add tree (repository structure)
 - Code quality
    - variables 1 letter
-   - properly named variables / functions
-   - is code easy to read?
-   - Comments 
    - style (5 pts)
       - doc strings
       - triple doubles for doc strings

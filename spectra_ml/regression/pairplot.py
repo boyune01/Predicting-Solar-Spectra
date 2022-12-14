@@ -9,11 +9,7 @@ import seaborn as sns
 
 pd.set_option('display.max_columns', None)
 
-
-"""
-reading in data and defining X matrix & y vector
-"""
-
+# Reading in data and defining X matrix & y vector
 df = pd.read_csv('../../data/input_cleaned/linreg.csv')
 print(df)
 
@@ -25,9 +21,5 @@ X = df[['Zenith Angle [degrees]', 'Azimuth Angle [degrees]',
         'Precipitable Water [mm]']]
 y = df['cct']
 
-
-"""
-generate pairplot of explanatory variables
-"""
-
+# Generate pairplot of explanatory variables
 sns.pairplot(X)

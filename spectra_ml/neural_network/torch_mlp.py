@@ -17,12 +17,12 @@ for i in [X, y]:
 
 
 class Perceptron(torch.nn.Module):
-    """Initializes perceptron with ReLU activation function"""
+    """Initializes a single perceptron with ReLU activation function"""
     def __init__(self):
         super(Perceptron, self).__init__()
         self.fc = nn.Linear(1, 1)
         self.relu = torch.nn.ReLU()
-    
+
     def forward(self, x):
         output = self.fc(x)
         output = self.relu(x)
@@ -34,11 +34,12 @@ class FeedForward(torch.nn.Module):
     def __init__(self, input_size, hidden_size):
         super(FeedForward, self).__init__()
         self.input_size = input_size
-        self.hidden_size  = hidden_size
+        self.hidden_size = hidden_size
         self.fc1 = torch.nn.Linear(self.input_size, self.hidden_size)
         self.relu = torch.nn.ReLU()
         self.fc2 = torch.nn.Linear(self.hidden_size, 1)
         self.sigmoid = torch.nn.Sigmoid()
+
     def forward(self, x):
         hidden = self.fc1(x)
         relu = self.relu(hidden)
@@ -81,7 +82,7 @@ y_test = torch.FloatTensor(y_test)
 
 model = FeedForward(13, 2)
 criterion = torch.nn.MSELoss()
-optimizer = torch.optim.SGD(model.parameters(), lr = 0.01)
+optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
 
 model.eval()
 y_pred = model(X_test)
@@ -89,8 +90,8 @@ dataset = torch.cat((X_train, y_train))
 trainloader = torch.utils.data.DataLoader(dataset, batch_size=10, shuffle=True, num_workers=1)
 mlp = MLP()
 
-# Run the training loop
-for epoch in range(0, 5): # 5 epochs at maximum
+# Run the training loop with maimum 5 epochs
+for epoch in range(0, 5):
 
     # Print epoch
     print(f'Starting epoch {epoch + 1}')
@@ -124,8 +125,7 @@ for epoch in range(0, 5): # 5 epochs at maximum
         # Print statistics
         current_loss += loss.item()
         if i % 10 == 0:
-            print('Loss after mini-batch %5d: %.3f' %
-            (i + 1, current_loss / 500))
+            print('Loss after mini-batch %5d: %.3f' (i + 1, current_loss/500))
             current_loss = 0.0
 
 # Training is complete.

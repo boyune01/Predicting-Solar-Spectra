@@ -9,12 +9,14 @@ y = np.loadtxt('data/input_cleaned/rad_input.csv', skiprows=1, delimiter=',', us
 for i in [X, y]:
     print(type(i), i.shape)
 
+
 class Perceptron(torch.nn.Module):
     """Initializes perceptron with ReLU activation function"""
     def __init__(self):
         super(Perceptron, self).__init__()
-        self.fc = nn.Linear(1,1)
+        self.fc = nn.Linear(1, 1)
         self.relu = torch.nn.ReLU()
+    
     def forward(self, x):
         output = self.fc(x)
         output = self.relu(x)

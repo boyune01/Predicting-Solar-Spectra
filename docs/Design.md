@@ -11,7 +11,7 @@
 - Get spectra ranging from 380 to 780nm given a (or, series of) time input
 - Graduate student - graduate school level in other fields than CS
 
-#### Broad Researcher (skin cancer, solar panels, evapotranspiration rates, etc.)
+#### Broad researcher (skin cancer, solar panels, evapotranspiration rates, etc.)
 - Get solar spectra for research applications
 - Get larger range of solar spectra (~300 - 1000nm)
 - Familiarity with programming/lacking expertise.

@@ -40,7 +40,51 @@ INCLUDE
 - Instructions on how to use the code
 - Examples --> how to work with package
 **
-
+.
+|-- LICENSE
+|-- README.md
+|-- data
+|   |-- data_for_test
+|   |   `-- test_rad_df.csv
+|   |-- input_cleaned
+|   |   |-- cct_input.csv
+|   |   |-- linreg.csv
+|   |   |-- pairplot.ipynb
+|   |   |-- rad_input.csv
+|   |   `-- wea_input.csv
+|   |-- input_example
+|   |   |-- 2020_0102_rad.csv
+|   |   |-- 2020_aod_ssa_asymmetry.csv
+|   |   |-- 2020_precipitable_water.csv
+|   |   `-- 2020_wea.csv
+|   `-- ref
+|       |-- cie_xyz.csv
+|       `-- rad_wvlen.csv
+|-- docs
+|   |-- CSE 583 - Tech Review.pdf
+|   |-- Design.md
+|   `-- SpectraML_Poster.pdf
+|-- environment.yml
+|-- mlp_train_loss.png
+|-- mlp_valid_loss.png
+`-- spectra_ml
+    |-- __init__.py
+    |-- calc_cct.py
+    |-- clean_data_test.ipynb
+    |-- clean_input_data.py
+    |-- neural_network
+    |   |-- sk_mlp.py
+    |   `-- torch_mlp.py
+    |-- regression
+    |   |-- linreg.py
+    |   |-- linregsm.py
+    |   |-- merge_weacct.py
+    |   |-- pairplot.py
+    |   `-- ridgereg.py
+    `-- test
+        |-- __init__.py
+        `-- test_clean_input_data.py
+        
 ## Project Description
 This analysis project seeks to build a model to accurately predict solar spectra given atmospheric parameters. Atmospheric data are recorded more often and in more places than solar spectral data. Currently, physics-based models are able to predict solar spectra based on atmospheric inputs, but are computationally expensive and only perform well within a select range of atmospheric conditions. This project seeks to streamline this process by using machine learning models to analyze the effect of atmospheric data on solar spectra and generate estimation paramaeters, allowing researchers to easily and accurately predict spectral data based on these atmospheric data, and incorporate solar spectra into analyses without the time and cost intensive need to collect or acquire spectral data themselves. These fields could include (but are not limited to) climate science, public health, built environments, photovoltaics, and agronomy. 
 

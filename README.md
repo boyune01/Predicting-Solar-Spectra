@@ -1,6 +1,9 @@
 # SpectraML
 
 [![Python Package using Conda](https://github.com/boyune01/Predicting-Solar-Spectra/actions/workflows/python-package-conda.yml/badge.svg)](https://github.com/boyune01/Predicting-Solar-Spectra/actions/workflows/python-package-conda.yml)
+        
+## Project Description
+This analysis project seeks to build a model to accurately predict solar spectra given atmospheric parameters. Atmospheric data are recorded more often and in more places than solar spectral data. Currently, physics-based models are able to predict solar spectra based on atmospheric inputs, but are computationally expensive and only perform well within a select range of atmospheric conditions. This project seeks to streamline this process by using machine learning models to analyze the effect of atmospheric data on solar spectra and generate estimation paramaeters, allowing researchers to easily and accurately predict spectral data based on these atmospheric data, and incorporate solar spectra into analyses without the time and cost intensive need to collect or acquire spectral data themselves. These fields could include (but are not limited to) climate science, public health, built environments, photovoltaics, and agronomy. 
 
 ## Repository Structure
 ```
@@ -49,9 +52,6 @@
         ├── __init__.py
         └── test_clean_input_data.py
 ```
-        
-## Project Description
-This analysis project seeks to build a model to accurately predict solar spectra given atmospheric parameters. Atmospheric data are recorded more often and in more places than solar spectral data. Currently, physics-based models are able to predict solar spectra based on atmospheric inputs, but are computationally expensive and only perform well within a select range of atmospheric conditions. This project seeks to streamline this process by using machine learning models to analyze the effect of atmospheric data on solar spectra and generate estimation paramaeters, allowing researchers to easily and accurately predict spectral data based on these atmospheric data, and incorporate solar spectra into analyses without the time and cost intensive need to collect or acquire spectral data themselves. These fields could include (but are not limited to) climate science, public health, built environments, photovoltaics, and agronomy. 
 
 ## Data
 The training data comes from [NREL Solar Radiation Research Laboratory](https://midcdmz.nrel.gov/apps/sitehome.pl?site=BMS) where time interval data is saved. For this project, data from 2015 to 2021 is used, with records taken every half hour. **Training data** is divided into two parts **(1) Atmospheric weather data**, and **(2) Continuous Solar spectra data**. 

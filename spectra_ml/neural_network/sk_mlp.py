@@ -70,5 +70,5 @@ def train_mlp(X, y):
     """
 
 
-# Execute function
+# Run the function
 train_mlp(X, y)

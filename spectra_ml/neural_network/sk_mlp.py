@@ -19,6 +19,7 @@ y = np.loadtxt('data/input_cleaned/rad_input.csv', skiprows=1, delimiter=',', us
 for i in [X, y]:
     print(type(i), i.shape)
 
+
 def train_mlp(X, y):
     # Perform 80-20 train/test split
     X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.8, random_state=1)
@@ -67,6 +68,7 @@ def train_mlp(X, y):
     plt.legend()
     plt.savefig('mlp_loss.png')
     """
+
 
 # Execute function
 train_mlp(X, y)

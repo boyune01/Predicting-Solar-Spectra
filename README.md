@@ -1,23 +1,8 @@
-# SolarML
+# SpectraML
 
 [![Python Package using Conda](https://github.com/boyune01/Predicting-Solar-Spectra/actions/workflows/python-package-conda.yml/badge.svg)](https://github.com/boyune01/Predicting-Solar-Spectra/actions/workflows/python-package-conda.yml)
 
-- Code quality
-   - variables 1 letter
-   - style (5 pts)
-      - doc strings
-      - triple doubles for doc strings
-      - style checker
-
-- Update design docs
-    - documentation? (To pull down repository and run the code --> should be in the readme)
-
-INCLUDE
-- Instructions on how to use the code
-- Examples --> how to work with package
-**
-
-Structure
+## Repository Structure
 ```
 .
 ├── LICENSE
@@ -105,7 +90,7 @@ This data shows radiation data (in unit of W/m<sup>2</sup>) for every nm. The wa
 
 For linear regression analysis, a the range of wavelength measurements comprising the solar spectra at each time interval are compressed into a single scalar value. **Correlated Color Temperature** (or **CCT**) provides a single value which corresponds to the predominant color of light as the sun's angle and other atmospheric conditions change over time. 
 
-## Software
+## Requirements
 
 The modules included in this package are designed to be run via python on any atmospheric data containing the variables specifed above. The predict function requires only that the pandas (1.5.1) package be installed. Evaluation of the modeling code itself additionally requires the following packages: pytorch (1.13.0), scikit-learn (1.1.3), scipy (1.9.3), seaborn (0.12.1) and statsmodels (0.13.2).
 
@@ -123,3 +108,13 @@ Execution of prediction code will require variables to be named precisely. The l
 10. **SSA** - "SSA [675nm]"
 11. **Asymmetry** - "Asymmetry [675nm]"
 12. **Precipitable Water** - "Precipitable Water [mm]"
+
+## Installation
+
+SpectraML can be installed using the command line and is best used with a virtual environment due to its dependencies.
+
+1. Open your choice of terminal (e.g., Terminal (MacOS) or [Ubuntu 20.04 LTS](https://www.microsoft.com/en-us/p/ubuntu-2004-lts/9n6svws3rx71?activetab=pivot:overviewtab) (Windows))
+2. Clone the repository using `git clone https://github.com/boyune01/Predicting-Solar-Spectra.git`
+3. Change to the SpectraML directory using `cd Predicting-Solar-Spectra`
+4. Set up a new virtual environment with all necessary packages and their dependencies using `conda env create -f environment.yml`
+5. Activate the SpectraML virtual environment with `conda activate Predicting-Solar-Spectra`

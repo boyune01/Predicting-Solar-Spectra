@@ -9,6 +9,7 @@ import statsmodels.api as sm
 
 pd.set_option('display.max_columns', None)
 
+
 # Define linreg function
 def linreg(df):
     """

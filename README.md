@@ -40,12 +40,14 @@ INCLUDE
 - Instructions on how to use the code
 - Examples --> how to work with package
 **
+
+Structure
 .
-|-- LICENSE
-|-- README.md
-|-- data
-|   |-- data_for_test
-|   |   `-- test_rad_df.csv
+|-- LICENSE\
+|-- README.md\
+|-- data\
+|   |-- data_for_test\
+|   |   `-- test_rad_df.csv\
 |   |-- input_cleaned
 |   |   |-- cct_input.csv
 |   |   |-- linreg.csv

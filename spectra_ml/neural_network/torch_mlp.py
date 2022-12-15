@@ -1,3 +1,8 @@
+"""
+Module to train deep neural network using PyTorch framework. It takes cleaned
+weather data and manipulates it in torch tensors.
+"""
+
 import numpy as np
 import torch
 from torch import nn
@@ -6,30 +11,35 @@ from torch import nn
 X = np.loadtxt('data/input_cleaned/wea_input.csv', skiprows=1, delimiter=',', usecols=range(1, 14))
 y = np.loadtxt('data/input_cleaned/rad_input.csv', skiprows=1, delimiter=',', usecols=range(1, 14))
 
+# Check input dimensions
 for i in [X, y]:
     print(type(i), i.shape)
 
+
 class Perceptron(torch.nn.Module):
-    """Initializes perceptron with ReLU activation function"""
+    """Initializes a single perceptron with ReLU activation function"""
     def __init__(self):
         super(Perceptron, self).__init__()
-        self.fc = nn.Linear(1,1)
+        self.fc = nn.Linear(1, 1)
         self.relu = torch.nn.ReLU()
+
     def forward(self, x):
         output = self.fc(x)
         output = self.relu(x)
         return output
+
 
 class FeedForward(torch.nn.Module):
     """Defines forward feed object with (input_size) nodes and (hidden_size) layers"""
     def __init__(self, input_size, hidden_size):
         super(FeedForward, self).__init__()
         self.input_size = input_size
-        self.hidden_size  = hidden_size
+        self.hidden_size = hidden_size
         self.fc1 = torch.nn.Linear(self.input_size, self.hidden_size)
         self.relu = torch.nn.ReLU()
         self.fc2 = torch.nn.Linear(self.hidden_size, 1)
         self.sigmoid = torch.nn.Sigmoid()
+
     def forward(self, x):
         hidden = self.fc1(x)
         relu = self.relu(hidden)
@@ -37,8 +47,9 @@ class FeedForward(torch.nn.Module):
         output = self.sigmoid(output)
         return output
 
+
 class MLP(nn.Module):
-    """Multilayer Perceptron for regression"""
+    """Initialize multilayer perceptron for regression"""
     def __init__(self):
         super().__init__()
         self.layers = nn.Sequential(
@@ -48,6 +59,7 @@ class MLP(nn.Module):
             nn.ReLU(),
             nn.Linear(32, 1)
         )
+
 
 # Separate weather and radiance data into train and test with an 80-20 split
 X_train_size = int(0.8 * len(X))
@@ -70,34 +82,19 @@ y_test = torch.FloatTensor(y_test)
 
 model = FeedForward(13, 2)
 criterion = torch.nn.MSELoss()
-optimizer = torch.optim.SGD(model.parameters(), lr = 0.01)
+optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
 
 model.eval()
 y_pred = model(X_test)
-before_train = criterion(y_pred.squeeze(), y_test)
-print("Test loss before training", before_train.item())
-
-"""
-model = FeedForward(2, 10)
-optimizer = torch.optim.SGD(model.parameters(), lr = 0.01)
-# trainloader = torch.utils.data.DataLoader(dataset, batch_size=10, shuffle=True, num_workers=1)
-criterion = torch.nn.MSELoss()
-# criterion = mse(input, target)
-
-model.eval()
-y_pred = model(X_test)
-before_train = criterion(y_pred.squeeze(), y_test)
-print('Test loss before training' , before_train.item())
-
+dataset = torch.cat((X_train, y_train))
+trainloader = torch.utils.data.DataLoader(dataset, batch_size=10, shuffle=True, num_workers=1)
 mlp = MLP()
-loss_function = nn.L1Loss()
-optimizer = torch.optim.Adam(mlp.parameters(), lr=1e-4)
 
-# Run the training loop
-for epoch in range(0, 5): # 5 epochs at maximum
+# Run the training loop with maimum 5 epochs
+for epoch in range(0, 5):
 
     # Print epoch
-    print(f'Starting epoch {epoch+1}')
+    print(f'Starting epoch {epoch + 1}')
 
     # Set current loss value
     current_loss = 0.0
@@ -117,7 +114,7 @@ for epoch in range(0, 5): # 5 epochs at maximum
         outputs = mlp(inputs)
 
         # Compute loss
-        loss = loss_function(outputs, targets)
+        loss = criterion(outputs, targets)
 
         # Perform backward pass
         loss.backward()
@@ -128,14 +125,8 @@ for epoch in range(0, 5): # 5 epochs at maximum
         # Print statistics
         current_loss += loss.item()
         if i % 10 == 0:
-            print('Loss after mini-batch %5d: %.3f' %
-            (i + 1, current_loss / 500))
+            print('Loss after mini-batch %5d: %.3f' (i + 1, current_loss/500))
             current_loss = 0.0
 
-# Process is complete.
+# Training is complete.
 print('Training process has finished.')
-
-# train_data, test_data = torch.utils.data.random_split(X, y)
-# test_tensor = torch.tensor(X)
-# train_dataset, test_dataset = torch.utils.data.random_split(full_dataset, [train_size, test_size])
-"""

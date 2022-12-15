@@ -14,6 +14,7 @@ wea_data_dir = "data/input_example/2020_wea.csv"
 precip_data_dir = "data/input_example/2020_precipitable_water.csv"
 data_dir = "data/input_example/"
 
+
 class UnitTests(unittest.TestCase):
 
     def test_read_wea_datas_smoke(self):
@@ -38,7 +39,7 @@ class UnitTests(unittest.TestCase):
         """
         df = pd.read_csv(
                 wea_data_dir,
-                parse_dates={"date":["DATE (MM/DD/YYYY)", "MST"]}
+                parse_dates={"date": ["DATE (MM/DD/YYYY)", "MST"]}
                 )
         clean_input_data.drop_dup_nan(df, 'date')
         return
@@ -99,12 +100,12 @@ class UnitTests(unittest.TestCase):
         """
         df1 = pd.read_csv(
                 wea_data_dir,
-                parse_dates={"date":["DATE (MM/DD/YYYY)", "MST"]}
+                parse_dates={"date": ["DATE (MM/DD/YYYY)", "MST"]}
                 )
 
         df2 = pd.read_csv(
                 precip_data_dir,
-                parse_dates={"date":["DATE (MM/DD/YYYY)", "MST"]}
+                parse_dates={"date": ["DATE (MM/DD/YYYY)", "MST"]}
                 )
 
         clean_input_data.cull_df(df1, df2)

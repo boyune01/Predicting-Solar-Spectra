@@ -11,7 +11,7 @@
 - Get spectra ranging from 380 to 780nm given a (or, series of) time input
 - Graduate student - graduate school level in other fields than CS
 
-#### Broad Researcher (skin cancer, solar panels, evapotranspiration rates, etc.)
+#### Broad researcher (skin cancer, solar panels, evapotranspiration rates, etc.)
 - Get solar spectra for research applications
 - Get larger range of solar spectra (~300 - 1000nm)
 - Familiarity with programming/lacking expertise.
@@ -49,13 +49,15 @@
 	- Code that originally trained model and found estimation parameters
 	- Will need to match solar spectra data to weather data
 	- ML approach to train model
-- User interface? - Most likely a python module that defines a function to be run on user's data
-- Function - Input weather data
-	- Change .csv to pandas dataframe
-	- Combine based on same timeseries
-- Function - Input time period
-	- Output series of time periods given start and end date
-- Function - Input spectral range (used for output spectral range)
-	- Create range to put into the output
-- Function
-	- Output series of vector of spectra data
+
+## Future milestones
+- Module - Defining  function to be run on user's atmospheric data that predicts solar spectral output
+	- Function - Input weather data
+		- Change .csv to pandas dataframe
+		- Combine based on same timeseries
+	- Function - Input time period
+		- Output series of time periods given start and end date
+	- Function - Input spectral range (used for output spectral range)
+		- Create range to put into the output
+	- Function
+		- Output series of vector of spectra data

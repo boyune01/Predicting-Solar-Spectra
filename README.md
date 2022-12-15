@@ -32,6 +32,11 @@ This analysis project seeks to build a model to accurately predict solar spectra
 │   ├── Design.md
 │   └── SpectraML_Poster.pdf
 ├── environment.yml
+├── plots
+│   ├── mlp_train_loss.png
+│   ├── mlp_valid_loss.png
+│   ├── pairplot.ipynb
+│   └── ridgereg_plot.ipynb
 └── spectra_ml
     ├── __init__.py
     ├── calc_cct.py
@@ -45,8 +50,6 @@ This analysis project seeks to build a model to accurately predict solar spectra
     ├── regression
     │   ├── linreg.py
     │   ├── linregsm.py
-    │   ├── merge_weacct.py
-    │   ├── pairplot.py
     │   └── ridgereg.py
     └── test
         ├── __init__.py
